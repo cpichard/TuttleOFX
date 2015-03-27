@@ -12,7 +12,6 @@ int IVertex::_count = 0;
 IVertex::IVertex( const std::string& name )
 	: _name( name )
 	, _processNode( NULL )
-	//, _fake( true )
 	, _used( true )
 	, _id( _count++ )
 {}
@@ -20,7 +19,6 @@ IVertex::IVertex( const std::string& name )
 IVertex::IVertex( const std::string& name, INode& processNode )
 	: _name( name )
 	, _processNode( &processNode )
-	//, _fake( false )
 	, _used( true )
 	, _id( _count++ )
 {}
