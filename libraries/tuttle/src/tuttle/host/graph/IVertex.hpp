@@ -27,14 +27,16 @@ public:
 	{
 		_name           = v._name;
 		_processNode    = v._processNode; 
-		_fake           = v._fake;
+		//_fake           = v._fake;
 		_used           = v._used; 
 		return *this;
 	}
 
     // FIXME: "fake" doesn't mean anything. 
     // to double check but it more likeky means hasNoProcessNode()
-	bool                  isFake() const                                     { return _fake; }
+	//bool                  isFake() const                                     { return _fake; }
+    //bool                  hasNoProcessNode() const                           { return _processNode==NULL;}
+    bool                  hasProcessNode() const                             { return _processNode!=NULL;}
 	void                  setUsed( const bool used = true )                  { _used = used; }
 	bool                  isUsed() const                                     { return _used; }
 	const std::string&    getName() const                                    { return _name; }
@@ -56,6 +58,7 @@ public:
 		}
 		return *_processNode;
 	}
+
 	void                  setProcessNode( INode* p )
 	{
 		_processNode = p;
@@ -69,7 +72,7 @@ public:
 	
 private:
 	INode* _processNode; // FIXME : why is it stored in a IVertex ?
-	bool _fake; // FIXME : check that_fake == (_processNode == NULL) and remove this member
+	//bool _fake; // FIXME : check that_fake == (_processNode == NULL) and remove this member
 	bool _used; // FIXME : remove as it is only used to compute connected component in 1 function and
                 //         can be replaced 
 	static int _count;

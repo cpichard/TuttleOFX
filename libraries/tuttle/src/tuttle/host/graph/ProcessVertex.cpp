@@ -33,7 +33,7 @@ std::ostream& ProcessVertex::exportDotDebug( std::ostream& os ) const
 {
 	std::ostringstream s;
 	s << subDotEntry( "label", getName() );
-	if( ! isFake() )
+	if( hasProcessNode() )
 	{
 		/// @todo remove this. Temporary solution
 		switch( getProcessNode().getNodeType() )

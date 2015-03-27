@@ -37,7 +37,7 @@ inline void connectClips( TGraph& graph )
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << vertexOutput << " -> " << vertexInput );
 		//TUTTLE_TLOG_VAR( TUTTLE_TRACE, edge.getInAttrName() );
 		
-		if( ! vertexOutput.isFake() && ! vertexInput.isFake() )
+		if( vertexOutput.hasProcessNode() && vertexInput.hasProcessNode() )
 		{
 			INode& outputNode = vertexOutput.getProcessNode();
 			INode& inputNode = vertexInput.getProcessNode();
@@ -68,10 +68,8 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Setup 1] finish vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessNode().setup1();
+		if( vertex.hasProcessNode() )
+		    vertex.getProcessNode().setup1();
 	}
 
 private:
@@ -95,10 +93,8 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Setup 2] discover vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessNode().setup2_reverse();
+		if( vertex.hasProcessNode() )
+            vertex.getProcessNode().setup2_reverse();
 	}
 
 private:
@@ -122,10 +118,8 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Setup 3] finish vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessNode().setup3();
+		if( vertex.hasProcessNode() )
+		    vertex.getProcessNode().setup3();
 	}
 
 private:
@@ -149,11 +143,11 @@ public:
 		Vertex& vertex = _graph.instance( vd );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Time Domain] finish vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessData()._timeDomain = vertex.getProcessNode().computeTimeDomain();
-		TUTTLE_TLOG( TUTTLE_TRACE, "[Time Domain] min: " << vertex.getProcessData()._timeDomain.min << ", max: " << vertex.getProcessData()._timeDomain.max );
+		if( vertex.hasProcessNode() )
+        {
+		    vertex.getProcessData()._timeDomain = vertex.getProcessNode().computeTimeDomain();
+		    TUTTLE_TLOG( TUTTLE_TRACE, "[Time Domain] min: " << vertex.getProcessData()._timeDomain.min << ", max: " << vertex.getProcessData()._timeDomain.max );
+        }
 	}
 
 private:
@@ -185,36 +179,36 @@ public:
 		Vertex& vertex = _graph.instance( vd );
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Compute Hash At Time] finish vertex " << vertex );
 
-		if( vertex.isFake() )
-			return;
+		if( vertex.hasProcessNode() )
+        {
+            const std::size_t localHash = vertex.getProcessNode().getLocalHashAtTime(_time);
 
-		const std::size_t localHash = vertex.getProcessNode().getLocalHashAtTime(_time);
-
-		typedef std::map<VertexKey, std::size_t> InputsHash;
-		InputsHash inputsGlobalHash;
-		BOOST_FOREACH( const edge_descriptor& ed, _graph.getOutEdges( vd ) )
-		{
-			const Edge& edge = _graph.instance( ed );
-			vertex_descriptor inputVertexDesc = _graph.target( ed );
-			Vertex& inputVertex = _graph.instance( inputVertexDesc );
-			
-			const std::size_t inputGlobalHash = _outNodesHash.getHash(inputVertex.getKey());
-			// Key is: (clipName, time)
-			VertexKey k( edge.getInAttrName(), edge.getOutTime() );
-			inputsGlobalHash[k] = inputGlobalHash;
-		}
-		// inputGlobalHashes is put into a map to be ordered by clip name
-		// the clipName is unique for each time used
-		std::size_t seed = localHash;
-		BOOST_FOREACH( const typename InputsHash::value_type& inputGlobalHash, inputsGlobalHash )
-		{
-			//TUTTLE_TLOG_VAR2( TUTTLE_TRACE, inputGlobalHash.first, inputGlobalHash.second );
-			boost::hash_combine( seed, inputGlobalHash.first.getName() ); // name of the input clip connected
-			boost::hash_combine( seed, inputGlobalHash.second );
-		}
-		_outNodesHash.addHash( vertex.getKey(), seed );
-		//TUTTLE_TLOG_VAR( TUTTLE_TRACE, localHash );
-		//TUTTLE_TLOG_VAR2( TUTTLE_TRACE, vertex.getKey(), seed );
+            typedef std::map<VertexKey, std::size_t> InputsHash;
+            InputsHash inputsGlobalHash;
+            BOOST_FOREACH( const edge_descriptor& ed, _graph.getOutEdges( vd ) )
+            {
+                const Edge& edge = _graph.instance( ed );
+                vertex_descriptor inputVertexDesc = _graph.target( ed );
+                Vertex& inputVertex = _graph.instance( inputVertexDesc );
+                
+                const std::size_t inputGlobalHash = _outNodesHash.getHash(inputVertex.getKey());
+                // Key is: (clipName, time)
+                VertexKey k( edge.getInAttrName(), edge.getOutTime() );
+                inputsGlobalHash[k] = inputGlobalHash;
+            }
+            // inputGlobalHashes is put into a map to be ordered by clip name
+            // the clipName is unique for each time used
+            std::size_t seed = localHash;
+            BOOST_FOREACH( const typename InputsHash::value_type& inputGlobalHash, inputsGlobalHash )
+            {
+                //TUTTLE_TLOG_VAR2( TUTTLE_TRACE, inputGlobalHash.first, inputGlobalHash.second );
+                boost::hash_combine( seed, inputGlobalHash.first.getName() ); // name of the input clip connected
+                boost::hash_combine( seed, inputGlobalHash.second );
+            }
+            _outNodesHash.addHash( vertex.getKey(), seed );
+            //TUTTLE_TLOG_VAR( TUTTLE_TRACE, localHash );
+            //TUTTLE_TLOG_VAR2( TUTTLE_TRACE, vertex.getKey(), seed );
+        }
 	}
 
 private:
@@ -264,7 +258,7 @@ public:
 
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Deploy Time] " << vertex );
-		if( vertex.isFake() )
+		if( ! vertex.hasProcessNode() )
 		{
 			BOOST_FOREACH( const edge_descriptor& ed, _graph.getOutEdges( v ) )
 			{
@@ -372,7 +366,7 @@ public:
 		Vertex& vertex = _graph.instance( vd );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Remove identity nodes] finish vertex " << vertex );
-		if( vertex.isFake() )
+		if( ! vertex.hasProcessNode() )
 			return;
 
 		std::string inputClip;
@@ -604,12 +598,12 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Preprocess 1] finish vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		//TUTTLE_TLOG( TUTTLE_TRACE, vertex.getProcessDataAtTime()._time );
-		vertex.getProcessNode().preProcess1( vertex.getProcessDataAtTime() );
-	}
+		if( vertex.hasProcessNode() )
+        {
+		    //TUTTLE_TLOG( TUTTLE_TRACE, vertex.getProcessDataAtTime()._time );
+		    vertex.getProcessNode().preProcess1( vertex.getProcessDataAtTime() );
+	    }
+    }
 
 private:
 	TGraph& _graph;
@@ -632,10 +626,10 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Preprocess 2] discover vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessNode().preProcess2_reverse( vertex.getProcessDataAtTime() );
+		if( vertex.hasProcessNode() )
+	    {
+		    vertex.getProcessNode().preProcess2_reverse( vertex.getProcessDataAtTime() );
+        }
 	}
 
 private:
@@ -667,7 +661,7 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		ProcessVertexAtTimeData& procOptions = vertex.getProcessDataAtTime();
-		if( !vertex.isFake() )
+		if( !vertex.hasNoProcessNode() )
 		{
 			// compute local infos, need to be a real node !
 			vertex.getProcessNode().preProcess_infos( vertex.getProcessDataAtTime(), procOptions._time, procOptions._localInfos );
@@ -736,7 +730,7 @@ public:
 
 		// do nothing on the empty output node
 		// it's just a link to final nodes
-		if( vertex.isFake() )
+		if( !vertex.hasProcessNode() )
 			return;
 
 		// check if abort ?
@@ -788,8 +782,6 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE,"[Post-process] initialize_vertex " << vertex );
-		if( vertex.isFake() )
-			return;
 	}
 
 	template<class VertexDescriptor, class Graph>
@@ -798,11 +790,11 @@ public:
 		Vertex& vertex = _graph.instance( v );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Post-process] finish_vertex " << vertex );
-		if( vertex.isFake() )
-			return;
-
-		vertex.getProcessNode().postProcess( vertex.getProcessDataAtTime() );
-	}
+		if( vertex.hasProcessNode() )
+        {
+		    vertex.getProcessNode().postProcess( vertex.getProcessDataAtTime() );
+	    }
+    }
 
 private:
 	TGraph& _graph;
@@ -822,7 +814,7 @@ public:
     void finish_vertex( VertexDescriptor v, Graph& g )
     {
         Vertex& vertex = _graph.instance( v );
-		if( !vertex.isFake() )
+		if( vertex.hasProcessNode() )
 		{
             vertex.getProcessNode().beforeRenderCallback( vertex.getProcessNode(), vertex.getProcessDataAtTime() );
         }

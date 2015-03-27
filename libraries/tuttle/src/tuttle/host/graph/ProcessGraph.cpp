@@ -164,7 +164,7 @@ void ProcessGraph::initRenderGraph( Graph& userGraph, const std::list<std::strin
 
         // FIXME : if a "fake" node is just the output node, why not use the output node instead of
         // storing a "fake" variable ?
-		if( !v.isFake() )
+		if( v.hasProcessNode() )
 		{
             // FIXME : why using 2 methods ? USE_LINK and not USE_LINK ?
             //          decide !!!!
@@ -210,7 +210,7 @@ void ProcessGraph::setup()
 	BOOST_FOREACH( InternalGraphImpl::vertex_descriptor vd, _renderGraph.getVertices() )
 	{
 		Vertex& v = _renderGraph.instance(vd);
-		if( ! v.isFake() )
+		if( v.hasProcessNode() )
 		{
 			v.copyProcessData( _defaultProcessData ); 
             // Link the pointer of the newly created v._data to the process node
@@ -351,7 +351,7 @@ void ProcessGraph::setupAtTime( const OfxTime time )
 	BOOST_FOREACH( const InternalGraphAtTimeImpl::vertex_descriptor vd, _renderGraphAtTime.getVertices() )
 	{
 		VertexAtTime& v = _renderGraphAtTime.instance(vd);
-		if( ! v.isFake() )
+		if( v.hasProcessNode() )
 		{
 			//TUTTLE_TLOG( TUTTLE_INFO, "setProcessDataAtTime: " << v._name << " id: " << v._id << " at time: " << v._data._time );
 			v.getProcessNode().setProcessDataAtTime( &v._data );
@@ -507,7 +507,7 @@ void ProcessGraph::processAtTime( memory::IMemoryCache& outCache, const OfxTime 
 	BOOST_FOREACH( const InternalGraphAtTimeImpl::vertex_descriptor vd, _renderGraphAtTime.getVertices() )
 	{
 		VertexAtTime& v = _renderGraphAtTime.instance(vd);
-		if( ! v.isFake() )
+		if( v.hasProcessNode() )
 		{
 			v.getProcessNode().clearProcessDataAtTime();
 		}

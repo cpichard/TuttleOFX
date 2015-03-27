@@ -258,7 +258,7 @@ inline void graphConnectClips( TGraph& graph )
 		//TUTTLE_TLOG( TUTTLE_INFO, "[connectClips] " << edge );
 		//TUTTLE_TLOG( TUTTLE_INFO, vertexSource << "->" << vertexDest );
 		
-		if( ! vertexDest.isFake() && ! vertexSource.isFake() )
+		if( vertexDest.hasProcessNode() && vertexSource.hasProcessNode() )
 		{
 			INode& sourceNode = vertexSource.getProcessNode();
 			INode& targetNode = vertexDest.getProcessNode();

@@ -12,7 +12,7 @@ int IVertex::_count = 0;
 IVertex::IVertex( const std::string& name )
 	: _name( name )
 	, _processNode( NULL )
-	, _fake( true )
+	//, _fake( true )
 	, _used( true )
 	, _id( _count++ )
 {}
@@ -20,7 +20,7 @@ IVertex::IVertex( const std::string& name )
 IVertex::IVertex( const std::string& name, INode& processNode )
 	: _name( name )
 	, _processNode( &processNode )
-	, _fake( false )
+	//, _fake( false )
 	, _used( true )
 	, _id( _count++ )
 {}
@@ -40,7 +40,7 @@ std::ostream& IVertex::exportDotDebug( std::ostream& os ) const
 {
 	std::ostringstream s;
 	s << subDotEntry( "label", getName() );
-	if( ! isFake() )
+	if( hasProcessNode() )
 	{
 		/// @todo remove this. Temporary solution
 		s << subDotEntry( "bitdepth", static_cast<const ImageEffectNode&>( getProcessNode() ).getOutputClip().getBitDepthString() );
