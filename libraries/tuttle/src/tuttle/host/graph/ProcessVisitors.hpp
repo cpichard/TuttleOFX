@@ -22,29 +22,6 @@ namespace host {
 namespace graph {
 
 
-// NOTE: why is connectClips in a ProcessVisitor file ??
-//       it is only used in ProcessGraph.cpp 
-template<class TGraph>
-inline void connectClips( TGraph& graph )
-{
-	BOOST_FOREACH( typename TGraph::edge_descriptor ed, graph.getEdges() )
-	{
-		typename TGraph::Edge& edge           = graph.instance( ed );
-		typename TGraph::Vertex& vertexOutput = graph.targetInstance( ed );
-		typename TGraph::Vertex& vertexInput  = graph.sourceInstance( ed );
-
-		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << edge );
-		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << vertexOutput << " -> " << vertexInput );
-		//TUTTLE_TLOG_VAR( TUTTLE_TRACE, edge.getInAttrName() );
-		
-		if( vertexOutput.hasProcessNode() && vertexInput.hasProcessNode() )
-		{
-			INode& outputNode = vertexOutput.getProcessNode();
-			INode& inputNode = vertexInput.getProcessNode();
-			inputNode.connect( outputNode, inputNode.getAttribute( edge.getInAttrName() ) );
-		}
-	}
-}
 
 
 namespace visitor {

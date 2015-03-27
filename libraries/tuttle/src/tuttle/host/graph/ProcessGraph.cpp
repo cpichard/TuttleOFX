@@ -22,6 +22,29 @@ namespace tuttle {
 namespace host {
 namespace graph {
 
+
+template<class TGraph>
+inline void connectClips( TGraph& graph )
+{
+	BOOST_FOREACH( typename TGraph::edge_descriptor ed, graph.getEdges() )
+	{
+		typename TGraph::Edge& edge           = graph.instance( ed );
+		typename TGraph::Vertex& vertexOutput = graph.targetInstance( ed );
+		typename TGraph::Vertex& vertexInput  = graph.sourceInstance( ed );
+
+		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << edge );
+		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << vertexOutput << " -> " << vertexInput );
+		//TUTTLE_TLOG_VAR( TUTTLE_TRACE, edge.getInAttrName() );
+		
+		if( vertexOutput.hasProcessNode() && vertexInput.hasProcessNode() )
+		{
+			INode& outputNode = vertexOutput.getProcessNode();
+			INode& inputNode = vertexInput.getProcessNode();
+			inputNode.connect( outputNode, inputNode.getAttribute( edge.getInAttrName() ) );
+		}
+	}
+}
+
 // FIXME : what happens if a node is named TUTTLE_FAKE_OUTPUT ??
 // should store the Vertex instead of the name
 const std::string ProcessGraph::_outputId( "TUTTLE_FAKE_OUTPUT" );
