@@ -37,7 +37,7 @@ public:
 
 	void clearTimeInfo() { _data.clearTimeInfo(); }
 	
-	void setProcessData( const ProcessVertexData& d ) { _data = d; }
+	void copyProcessData( const ProcessVertexData& d ) { _data = d; }
 
 	ProcessVertexData&       getProcessData()       { return _data; }
 	const ProcessVertexData& getProcessData() const { return _data; }

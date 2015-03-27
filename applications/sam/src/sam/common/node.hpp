@@ -205,9 +205,9 @@ void setParametersForNode( const std::vector<std::string> parameters, ttl::Graph
 void connectClips( const std::vector<ttl::Graph::Node*> nodes, const std::vector<ClipAndConnection> clipsToConnect, ttl::Graph::Node& currentNode, ttl::Graph& graph, const std::vector<std::string> idNames )
 {
 	// connect current node to previous node(s)
-	if( nodes.size() > 0 ) // if not the first node
+	if( ! nodes.empty() ) // if not the first node
 	{
-		if( clipsToConnect.size() == 0 )
+		if( clipsToConnect.empty() )
 		{
 			// No clip connection specified, so by default
 			// we connect the new node to the last previous node

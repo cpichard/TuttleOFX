@@ -129,11 +129,13 @@ InternalGraph<VERTEX, EDGE, OutEdgeList, VertexList, EdgeList>::getUnconnectedVe
 }
 
 template< typename VERTEX, typename EDGE, typename OutEdgeList, typename VertexList, typename EdgeList >
-std::size_t InternalGraph<VERTEX, EDGE, OutEdgeList, VertexList, EdgeList>::removeUnconnectedVertices( const vertex_descriptor& vroot )
+void InternalGraph<VERTEX, EDGE, OutEdgeList, VertexList, EdgeList>::removeUnconnectedVertices( const vertex_descriptor& vroot )
 {
+    // Find connected component by marking them
 	visitor::MarkUsed<This> vis( *this );
 	this->depthFirstVisit( vis, vroot );
 
+    // Remove unconnected component 
 	std::list<std::string> toRemove;
 	BOOST_FOREACH( const vertex_descriptor &vd, getVertices() )
 	{
@@ -149,8 +151,6 @@ std::size_t InternalGraph<VERTEX, EDGE, OutEdgeList, VertexList, EdgeList>::remo
 		//TUTTLE_TLOG( TUTTLE_TRACE, "removeVertex: " << vs );
 		this->removeVertex( getVertexDescriptor( vs ) );
 	}
-
-	return toRemove.size();
 }
 
 template< typename Vertex, typename Edge >

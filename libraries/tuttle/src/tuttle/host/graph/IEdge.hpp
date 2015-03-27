@@ -47,7 +47,7 @@ public:
 	std::string _in;
 	std::string _inAttrName;
 	std::string _name;
-	std::size_t _localId;
+	std::size_t _localId; // FIXME: remove as it seems to be unused
 
 };
 

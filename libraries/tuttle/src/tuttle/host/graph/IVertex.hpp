@@ -26,12 +26,14 @@ public:
 	IVertex& operator=( const IVertex& v )
 	{
 		_name           = v._name;
-		_processNode    = v._processNode;
+		_processNode    = v._processNode; 
 		_fake           = v._fake;
-		_used           = v._used;
+		_used           = v._used; 
 		return *this;
 	}
 
+    // FIXME: "fake" doesn't mean anything. 
+    // to double check but it more likeky means hasNoProcessNode()
 	bool                  isFake() const                                     { return _fake; }
 	void                  setUsed( const bool used = true )                  { _used = used; }
 	bool                  isUsed() const                                     { return _used; }
@@ -66,9 +68,10 @@ public:
 	std::string _name;
 	
 private:
-	INode* _processNode;
-	bool _fake;
-	bool _used;
+	INode* _processNode; // FIXME : why is it stored in a IVertex ?
+	bool _fake; // FIXME : check that_fake == (_processNode == NULL) and remove this member
+	bool _used; // FIXME : remove as it is only used to compute connected component in 1 function and
+                //         can be replaced 
 	static int _count;
 
 public:

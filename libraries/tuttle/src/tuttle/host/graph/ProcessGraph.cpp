@@ -22,19 +22,22 @@ namespace tuttle {
 namespace host {
 namespace graph {
 
+// FIXME : what happens if a node is named TUTTLE_FAKE_OUTPUT ??
+// should store the Vertex instead of the name
 const std::string ProcessGraph::_outputId( "TUTTLE_FAKE_OUTPUT" );
 
 ProcessGraph::ProcessGraph( const ComputeOptions& options, Graph& userGraph, const std::list<std::string>& outputNodes, memory::IMemoryCache& internMemoryCache )
-	: _instanceCount( userGraph.getInstanceCount() )
-	, _options(options)
+	: //_instanceCount( userGraph.getInstanceCount() )
+	 _options(options)
 	, _internMemoryCache(internMemoryCache)
-	, _procOptions(&_internMemoryCache)
+	, _defaultProcessData(&_internMemoryCache)
 {
-	_procOptions._interactive = _options.getIsInteractive();
+	_defaultProcessData._interactive = _options.getIsInteractive();
 	// imageEffect specific...
-	_procOptions._renderScale = _options.getRenderScale();
-	
-	updateGraph( userGraph, outputNodes );
+	_defaultProcessData._renderScale = _options.getRenderScale();
+
+    // Build render graph    
+	initRenderGraph( userGraph, outputNodes );
 }
 
 ProcessGraph::~ProcessGraph()
@@ -43,112 +46,13 @@ ProcessGraph::~ProcessGraph()
 
 ProcessGraph::VertexAtTime::Key ProcessGraph::getOutputKeyAtTime( const OfxTime time )
 {
-	return VertexAtTime(Vertex(_procOptions, _outputId), time).getKey();
+	return VertexAtTime(Vertex(_defaultProcessData, _outputId), time).getKey();
 }
 
 ProcessGraph::InternalGraphAtTimeImpl::vertex_descriptor ProcessGraph::getOutputVertexAtTime( const OfxTime time )
 {
 	return _renderGraphAtTime.getVertexDescriptor( getOutputKeyAtTime( time ) );
 }
-
-/**
- * @brief After copying Vertices, we need to duplicate Nodes and relink Vertices with new Nodes.
- */
-void ProcessGraph::relink()
-{
-	_renderGraph.removeUnconnectedVertices( _renderGraph.getVertexDescriptor( _outputId ) );
-
-	BOOST_FOREACH( InternalGraphImpl::vertex_descriptor vd, _renderGraph.getVertices() )
-	{
-		Vertex& v = _renderGraph.instance( vd );
-
-		// fake node has no ProcessNode
-		if( !v.isFake() )
-		{
-#ifdef PROCESSGRAPH_USE_LINK
-			tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
-#else
-			const tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
-#endif
-			std::string key( origNode.getName() );
-			NodeMap::iterator it = _nodes.find( key );
-			tuttle::host::INode* newNode;
-			if( it != _nodes.end() )
-			{
-				newNode = it->second;
-			}
-			else
-			{
-#ifdef PROCESSGRAPH_USE_LINK
-				newNode = &origNode;
-				_nodes[key] = dynamic_cast<Node*>( newNode ); // link to the original node
-#else
-				newNode = origNode.clone();
-				/// @todo tuttle: no dynamic_cast here, _nodes must use tuttle::host::Node
-				_nodes.insert( key, dynamic_cast<Node*>( newNode ) ); // owns the new pointer
-#endif
-			}
-			// our vertices have a link to our Nodes
-			v.setProcessNode( newNode );
-		}
-	}
-}
-
-/*
-   void removeVertexAndReconnectTo( const VertexDescriptor& v, const VertexDescriptor& other )
-   {
-    InternalGraph::out_edge_iterator oe, oeEnd;
-    tie(oe, oeEnd) = out_edges(v, g);
-    // InternalGraph::in_edge_iterator ie, ieEnd;
-    // tie(ie, ieEnd) = in_edges(v, g);
-
-    for( ; oe != oeEnd; ++oe )
-	source( oe )
-
-    _renderGraph.removeVertex( v );
-   }
- */
-
-/*
-   // May be interesting for process function.
-   typedef std::vector< Vertex > container;
-   container c;
-   topological_sort( G, std::back_inserter(c) );
-
-   //cout << "A topological ordering: ";
-   //for( container::reverse_iterator ii=c.rbegin(); ii!=c.rend(); ++ii )
-   //cout << index(*ii) << " ";
-   //cout << endl;
-*/
-/*
-template<class TGraph>
-class SortEdgeByMemorySize
-{
-public:
-	typedef typename TGraph::GraphContainer GraphContainer;
-	typedef typename TGraph::Vertex Vertex;
-	typedef typename TGraph::Edge Edge;
-	typedef typename TGraph::edge_descriptor edge_descriptor;
-
-	SortEdgeByMemorySize( const TGraph& graph )
-		: _renderGraph( graph )
-	{}
-
-	inline bool operator()( const edge_descriptor& ed1, const edge_descriptor& ed2 ) const
-	{
-		const Vertex& v1 = _renderGraph.targetInstance( ed1 );
-		const Vertex& v2 = _renderGraph.targetInstance( ed2 );
-
-		bool res= v1.getProcessDataAtTime()._globalInfos._memory < v2.getProcessDataAtTime()._globalInfos._memory;
-//		TUTTLE_LOG_VAR2(v1.getName(), v1.getProcessDataAtTime()._globalInfos._memory);
-//		TUTTLE_LOG_VAR2(v2.getName(), v2.getProcessDataAtTime()._globalInfos._memory);
-//		TUTTLE_LOG_VAR(res);
-		return res;
-	}
-private:
-	const TGraph& _renderGraph;
-};
-*/
 
 void ProcessGraph::bakeGraphInformationToNodes( InternalGraphAtTimeImpl& _renderGraphAtTime )
 {
@@ -188,9 +92,9 @@ void ProcessGraph::bakeGraphInformationToNodes( InternalGraphAtTimeImpl& _render
 void ProcessGraph::beginSequence( const TimeRange& timeRange )
 {
 	_options.beginSequenceHandle();
-	_procOptions._renderTimeRange.min = timeRange._begin;
-	_procOptions._renderTimeRange.max = timeRange._end;
-	_procOptions._step                = timeRange._step;
+	_defaultProcessData._renderTimeRange.min = timeRange._begin;
+	_defaultProcessData._renderTimeRange.max = timeRange._end;
+	_defaultProcessData._step                = timeRange._step;
 
 	TUTTLE_TLOG( TUTTLE_INFO, "[begin sequence] start" );
 	//	BOOST_FOREACH( NodeMap::value_type& p, _nodes )
@@ -199,7 +103,7 @@ void ProcessGraph::beginSequence( const TimeRange& timeRange )
 		++it )
 	{
 		NodeMap::value_type& p = *it;
-		p.second->beginSequence( _procOptions );
+		p.second->beginSequence( _defaultProcessData );
 	}
 }
 
@@ -210,16 +114,21 @@ void ProcessGraph::endSequence()
 	//--- END sequence render
 	BOOST_FOREACH( NodeMap::value_type& p, _nodes )
 	{
-		p.second->endSequence( _procOptions ); // node option... or no option here ?
+		p.second->endSequence( _defaultProcessData ); // node option... or no option here ?
 	}
 }
 
-void ProcessGraph::updateGraph( Graph& userGraph, const std::list<std::string>& outputNodes )
+void ProcessGraph::initRenderGraph( Graph& userGraph, const std::list<std::string>& outputNodes )
 {
-	_renderGraph.copyTransposed( userGraph.getGraph() );
+    // Copy the relevant information from the user graph to the process graph
+    // using the Copier functor. It copies the user graph structure and populate this 
+	// with ProcessNodes
+    _renderGraph.copyTransposed( userGraph.getGraph() );
 
-	Vertex outputVertex( _procOptions, _outputId );
-
+    // Create and connect an output vertex to all the nodes we want to render 
+    // FIXME: this output vertex could be created in the constructor and be a member of
+    // the class
+	Vertex outputVertex( _defaultProcessData, _outputId );
 	if( outputNodes.size() )
 	{
 		_renderGraph.addVertex( outputVertex );
@@ -241,48 +150,76 @@ void ProcessGraph::updateGraph( Graph& userGraph, const std::list<std::string>& 
 		}
 	}
 	
-	relink();
+    // Remove unconnected components
+	_renderGraph.removeUnconnectedVertices( _renderGraph.getVertexDescriptor( _outputId ) );
+
+
+    // FIXME : what is the purpose of this following "relink" code ??
+    // the processNode is already instanciated in copyTransposed
+    // why not directly clone it there ? 
+    // even if the remove unconnected component pass is not done
+	BOOST_FOREACH( InternalGraphImpl::vertex_descriptor vd, _renderGraph.getVertices() )
+	{
+		Vertex& v = _renderGraph.instance( vd );
+
+        // FIXME : if a "fake" node is just the output node, why not use the output node instead of
+        // storing a "fake" variable ?
+		if( !v.isFake() )
+		{
+            // FIXME : why using 2 methods ? USE_LINK and not USE_LINK ?
+            //          decide !!!!
+#ifdef PROCESSGRAPH_USE_LINK
+			tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
+#else
+			const tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
+#endif
+			std::string key( origNode.getName() ); // Shouldn't it be origNode.getKey() ??
+			NodeMap::iterator it = _nodes.find( key );
+			tuttle::host::INode* newNode;
+			if( it != _nodes.end() )
+			{
+				newNode = it->second;
+			}
+			else
+			{
+#ifdef PROCESSGRAPH_USE_LINK
+				newNode = &origNode;
+				_nodes[key] = dynamic_cast<Node*>( newNode ); // link to the original node
+#else
+				newNode = origNode.clone();
+				/// @todo tuttle: no dynamic_cast here, _nodes must use tuttle::host::Node
+				_nodes.insert( key, dynamic_cast<Node*>( newNode ) ); // owns the new pointer
+#endif
+			}
+			// our vertices have a link to our Nodes
+			v.setProcessNode( newNode );
+		}
+	}
 }
 
+
+// FIXME: find a name that says something meaningful
 void ProcessGraph::setup()
 {
 	using namespace boost;
 	using namespace boost::graph;
 	TUTTLE_TLOG( TUTTLE_INFO, "[Process render] setup" );
 	
-	// Initialize variables
-//	OfxRectD renderWindow = { 0, 0, 0, 0 };
-
-	//--- BEGIN RENDER
-
-	///@todo tuttle: exception if there is non-optional clips unconnected.
-	/// It's already checked in the beginSequence of the imageEffectNode.
-	/// But maybe it could better to check that here independently from node types.
-//	graph::visitor::UnconnectedClips<InternalGraphImpl> unconnectedClipsVisitor( _renderGraph );
-//	_renderGraph.depthFirstSearch( unconnectedClipsVisitor );
-//	if( unconnectedClipsVisitor.value )
-//	{
-//		exception::user userMsg("Some non optional clips are unconnected. We can't do the process.\n");
-//		userMsg << "Unconnected clips : ";
-//		BOOST_FOREACH( clip, unconnectedClipsVisitor.clips )
-//		{
-//			userMsg << clip->getFullName() << ",";
-//		}
-//		userMsg << std::endl;
-//		BOOST_THROW_EXCEPTION( exception::Logic()
-//			<< userMsg );
-//	}
-
+	// Initialize the data of all process nodes with the default value
+    // NOTE: couldn't it be done when the copy transpose takes place ?
 	BOOST_FOREACH( InternalGraphImpl::vertex_descriptor vd, _renderGraph.getVertices() )
 	{
 		Vertex& v = _renderGraph.instance(vd);
 		if( ! v.isFake() )
 		{
-			v.setProcessData( _procOptions );
+			v.copyProcessData( _defaultProcessData ); 
+            // Link the pointer of the newly created v._data to the process node
+            // NOTE that it changes the user graph if the INode is the original shared
 			v.getProcessNode().setProcessData( &v._data );
 		}
 	}
-	
+
+    //    
 	connectClips<InternalGraphImpl>( _renderGraph );
 	
 	{
@@ -584,6 +521,8 @@ void ProcessGraph::processAtTime( memory::IMemoryCache& outCache, const OfxTime 
 	TUTTLE_LOG_TRACE( "[Process at time " << time << "] Out cache size: " << outCache.size() );
 }
 
+
+// Compute the nodes connected to the output node
 bool ProcessGraph::process( memory::IMemoryCache& outCache )
 {
 #ifdef TUTTLE_EXPORT_WITH_TIMER

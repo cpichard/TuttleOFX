@@ -21,6 +21,9 @@ namespace tuttle {
 namespace host {
 namespace graph {
 
+
+// NOTE: why is connectClips in a ProcessVisitor file ??
+//       it is only used in ProcessGraph.cpp 
 template<class TGraph>
 inline void connectClips( TGraph& graph )
 {

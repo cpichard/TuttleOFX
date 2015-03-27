@@ -50,6 +50,7 @@ public:
 		, _outDegree( 0 )
 		, _inDegree( 0 )
 	{
+        // FIXME _apiImageEffect is not initialized here 
 		_localInfos._nodes = 1; // local infos can contain only 1 node by definition...
 	}
 
@@ -60,6 +61,7 @@ public:
 		, _outDegree( 0 )
 		, _inDegree( 0 )
 	{
+        // FIXME _apiImageEffect is not initialized here 
 		_localInfos._nodes = 1; // local infos can contain only 1 node by definition...
 	}
 

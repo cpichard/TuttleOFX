@@ -342,11 +342,14 @@ void Graph::computeGlobalHashAtTime( NodeHashContainer& outNodesHash, const OfxT
 	procGraph.computeHashAtTime( outNodesHash, time );
 }
 
+
+// Compute with options 
 bool Graph::compute( const ComputeOptions& options )
 {
 	return compute( NodeListArg(), options );
 }
 
+// nodes : node to compute
 bool Graph::compute( const NodeListArg& nodes, const ComputeOptions& options )
 {
 	const_cast<ComputeOptions&>(options).setReturnBuffers( false );

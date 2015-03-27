@@ -78,7 +78,7 @@ bool TurboJpegReaderPlugin::getRegionOfDefinition( const OFX::RegionOfDefinition
 		
 		fclose(file);
 		file=NULL;
-		
+	//FIXME DEBUG HERE	
 		rod.x1 = 0;
 		rod.x2 = width * this->_clipDst->getPixelAspectRatio();
 		rod.y1 = 0;

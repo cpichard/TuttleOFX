@@ -513,7 +513,7 @@ public:
 	/**
 	 * @brief Remove all vertices without connection with vroot.
 	 */
-	std::size_t removeUnconnectedVertices( const vertex_descriptor& vroot );
+	void removeUnconnectedVertices( const vertex_descriptor& vroot );
 
 	template< typename Vertex, typename Edge >
 	friend std::ostream& operator<<( std::ostream& os, const This& g );

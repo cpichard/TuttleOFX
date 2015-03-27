@@ -57,11 +57,10 @@ private:
 	VertexAtTime::Key getOutputKeyAtTime( const OfxTime time );
 	InternalGraphAtTimeImpl::vertex_descriptor getOutputVertexAtTime( const OfxTime time );
 	
-	void relink();
 	void bakeGraphInformationToNodes( InternalGraphAtTimeImpl& renderGraphAtTime );
+	void initRenderGraph( Graph& userGraph, const std::list<std::string>& outputNodes );
 
 public:
-	void updateGraph( Graph& userGraph, const std::list<std::string>& outputNodes );
 
 	void setup();
 	std::list<TimeRange> computeTimeRange();
@@ -78,13 +77,13 @@ private:
 	InternalGraphImpl _renderGraph;
 	InternalGraphAtTimeImpl _renderGraphAtTime;
 	NodeMap _nodes;
-	InstanceCountMap _instanceCount;
+	//InstanceCountMap _instanceCount;
 
 	static const std::string _outputId;
 	
 	const ComputeOptions& _options;
 	memory::IMemoryCache& _internMemoryCache;
-	ProcessVertexData _procOptions;
+	ProcessVertexData _defaultProcessData;
 };
 
 }

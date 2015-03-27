@@ -749,7 +749,7 @@ OfxRectD OfxhImageEffectNode::calcDefaultRegionOfDefinition( OfxTime   time,
 			getProjectExtent( rod.x2, rod.y2 );
 			const attribute::OfxhClipImage& clip = getClip( kOfxImageEffectOutputClipName );
 			rod = clip.fetchRegionOfDefinition( time );
-			/// @todo tuttle: maybe RoD problems with Generator and Read here... to check !
+			/// FIXME @todo tuttle: maybe RoD problems with Generator and Read here... to check !
 		}
 		else if( _context == kOfxImageEffectContextFilter ||
 			_context == kOfxImageEffectContextPaint  ||
@@ -858,6 +858,7 @@ void OfxhImageEffectNode::getRegionOfDefinitionAction( OfxTime   time,
 
 	if( stat == kOfxStatOK )
 	{
+        // FIXME Breakpoint here
 		outArgs.getDoublePropertyN( kOfxImageEffectPropRegionOfDefinition, &rod.x1, 4 );
 	}
 	else if( stat == kOfxStatReplyDefault )
