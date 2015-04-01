@@ -61,6 +61,10 @@ namespace imageEffect {
  */
 class OfxhImageEffectNode : public OfxhImageEffectNodeBase
 	, public attribute::OfxhParamSet
+    // FIXME: This class derives attribute::OfxhClipImageSet but it would be
+    // more convenient to store 2 sets of clips
+    // an input and output clip set as all the algorithms work
+    // on one of those sets
 	, public attribute::OfxhClipImageSet
 	, public OfxhIProgress
 	, public OfxhIMessage
