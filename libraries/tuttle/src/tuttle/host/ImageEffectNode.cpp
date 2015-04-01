@@ -84,7 +84,7 @@ bool ImageEffectNode::operator==( const ImageEffectNode& other ) const
 
 void ImageEffectNode::connectClips( const INode& sourceEffect, attribute::Attribute& attr )
 {
-	const attribute::ClipImage& outputClip = dynamic_cast<const attribute::ClipImage&>( sourceEffect.getClip( kOfxImageEffectOutputClipName ) );
+	const attribute::ClipImage& outputClip = sourceEffect.getOutputClip();
 	attribute::ClipImage& inputClip        = dynamic_cast<attribute::ClipImage&>( attr ); // throw an exception if not a ClipImage attribute
 
 	inputClip.setConnectedClip( outputClip );
