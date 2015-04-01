@@ -10,6 +10,10 @@ class INode;
 
 namespace attribute {
 
+
+
+// NOTE : this class shares a lot of similarities with 
+// IVertex
 class Attribute
 {
 protected:

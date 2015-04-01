@@ -28,6 +28,7 @@ public:
 
 	ImageEffectNode( const ImageEffectNode& other );
 
+    // NOTE : no virtual destructor, check that no other class inherits this one
 	~ImageEffectNode();
 
 	std::string getLabel() const { return ofx::imageEffect::OfxhImageEffectNodeBase::getLabel(); }
@@ -46,7 +47,8 @@ public:
 
 	std::vector<int> getVersion() const
 	{
-		// don't works on many plugins
+        // FIXME: what is the problem here ?
+		// previous comment was : "doesn't work on multiple plugins"
 		//return getProperties().fetchIntProperty( kOfxPropVersion ).getValues();
 		// so get values from plugin
 		std::vector<int> v;

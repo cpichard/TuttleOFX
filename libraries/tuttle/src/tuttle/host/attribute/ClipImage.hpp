@@ -27,9 +27,11 @@ friend class INode;
 
 protected:
 	std::string _name;
-	bool _isConnected;
+	bool _isConnected; // FIXME : check if this variable means that _connectedClip is NULL and
+                       // if so, remove it and change isConnected()
 	bool _continuousSamples;
 
+	// FIXME: remove const or non const getConnectedClip
 	const ClipImage* _connectedClip; ///< @warning HACK ! to keep the connection @todo remove this !!!!
 
 public:
@@ -99,11 +101,13 @@ public:
 	/// @todo tuttle: this is really bad...
 	ClipImage& getConnectedClip()
 	{
+        // FIXME: what if _connectedClip is NULL ?
 		return const_cast<ClipImage&>( *_connectedClip );
 	}
 
 	const ClipImage& getConnectedClip() const
 	{
+        // FIXME: what if _connectedClip is NULL ?
 		return *_connectedClip;
 	}
 

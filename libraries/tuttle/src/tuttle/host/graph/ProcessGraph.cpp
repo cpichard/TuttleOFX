@@ -146,6 +146,8 @@ void ProcessGraph::initRenderGraph( Graph& userGraph, const std::list<std::strin
     // Copy the relevant information from the user graph to the process graph
     // using the Copier functor. It copies the user graph structure and populate this 
 	// with ProcessNodes
+    // NOTE that further in the process, this graph will be filtered keeping only
+    // connected components of the output nodes
     _renderGraph.copyTransposed( userGraph.getGraph() );
 
     // Create and connect an output vertex to all the nodes we want to render 
@@ -242,7 +244,9 @@ void ProcessGraph::setup()
 		}
 	}
 
-    //    
+    // Call the connect function of the ImageEffectNode for all the edges of the render graph
+    // This internally connects "Clips" a structure defined in the Ofx standard
+    // This also changes the userGraph nodes as they could be stored in the renderGraph
 	connectClips<InternalGraphImpl>( _renderGraph );
 	
 	{
