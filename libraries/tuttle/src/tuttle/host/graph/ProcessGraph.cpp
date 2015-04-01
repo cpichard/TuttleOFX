@@ -51,8 +51,7 @@ inline void connectClips( TGraph& graph )
 const std::string ProcessGraph::_outputId( "TUTTLE_FAKE_OUTPUT" );
 
 ProcessGraph::ProcessGraph( const ComputeOptions& options, Graph& userGraph, const std::list<std::string>& outputNodes, memory::IMemoryCache& internMemoryCache )
-	: //_instanceCount( userGraph.getInstanceCount() )
-	 _options(options)
+	: _options(options)
 	, _internMemoryCache(internMemoryCache)
 	, _defaultProcessData(&_internMemoryCache)
 {
