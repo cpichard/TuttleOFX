@@ -256,8 +256,8 @@ void ProcessGraph::setup()
 		TUTTLE_TLOG( TUTTLE_INFO, "[Process render] setup visitors" );
 		graph::visitor::Setup1<InternalGraphImpl> setup1Visitor( _renderGraph );
 		_renderGraph.depthFirstVisit( setup1Visitor, _renderGraph.getVertexDescriptor( _outputId ) );
-		graph::visitor::Setup2<InternalGraphImpl> setup2Visitor( _renderGraph );
-		_renderGraph.depthFirstVisit( setup2Visitor, _renderGraph.getVertexDescriptor( _outputId ) );
+		graph::visitor::MaximizeBitDepth<InternalGraphImpl> maximizeBitDepth( _renderGraph );
+		_renderGraph.depthFirstVisit( maximizeBitDepth, _renderGraph.getVertexDescriptor( _outputId ) );
 		graph::visitor::Setup3<InternalGraphImpl> setup3Visitor( _renderGraph );
 		_renderGraph.depthFirstVisit( setup3Visitor, _renderGraph.getVertexDescriptor( _outputId ) );
 	}

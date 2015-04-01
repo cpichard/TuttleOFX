@@ -54,13 +54,13 @@ private:
 };
 
 template<class TGraph>
-class Setup2 : public boost::default_dfs_visitor
+class MaximizeBitDepth : public boost::default_dfs_visitor
 {
 public:
 	typedef typename TGraph::GraphContainer GraphContainer;
 	typedef typename TGraph::Vertex Vertex;
 
-	Setup2( TGraph& graph )
+	MaximizeBitDepth( TGraph& graph )
 		: _graph( graph )
 	{}
 
@@ -69,9 +69,9 @@ public:
 	{
 		Vertex& vertex = _graph.instance( v );
 
-		TUTTLE_TLOG( TUTTLE_TRACE, "[Setup 2] discover vertex " << vertex );
+		TUTTLE_TLOG( TUTTLE_TRACE, "[Optimize bit depth] discover vertex " << vertex );
 		if( vertex.hasProcessNode() )
-            vertex.getProcessNode().setup2_reverse();
+			vertex.getProcessNode().maximizeBitDepthFromWritesToReads();
 	}
 
 private:

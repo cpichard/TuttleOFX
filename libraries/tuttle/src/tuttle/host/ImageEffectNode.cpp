@@ -762,10 +762,10 @@ void ImageEffectNode::setup1()
 	maximizeBitDepthFromReadsToWrites();
 }
 
-void ImageEffectNode::setup2_reverse()
-{
-	maximizeBitDepthFromWritesToReads();
-}
+//void ImageEffectNode::setup2_reverse()
+//{
+//	maximizeBitDepthFromWritesToReads();
+//}
 
 void ImageEffectNode::setup3()
 {

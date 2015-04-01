@@ -105,7 +105,7 @@ public:
 	OfxRangeD computeTimeDomain();
 
 	void setup1();
-	void setup2_reverse();
+	//void setup2_reverse();
 	void setup3();
 	
 	void beginSequence( graph::ProcessVertexData& vData );

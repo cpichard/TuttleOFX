@@ -123,7 +123,8 @@ public:
 	virtual void connectClips( const INode&, attribute::Attribute& ) = 0;
 
 	virtual void setup1() = 0;
-	virtual void setup2_reverse() = 0;
+	//virtual void setup2_reverse() = 0;
+	virtual void maximizeBitDepthFromWritesToReads () = 0;
 	virtual void setup3() = 0;
 	
 	virtual OfxRangeD computeTimeDomain() = 0;
