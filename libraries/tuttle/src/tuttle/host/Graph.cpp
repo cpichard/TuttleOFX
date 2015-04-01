@@ -248,21 +248,24 @@ void Graph::unconnect( const Attribute& outAttr, const Attribute& inAttr )
 namespace {
 template<class TGraph>
 inline void graphConnectClips( TGraph& graph )
+// FIXME: There is a similar function in ProcessGraph.cpp but it connects the clips the other way round
+// also this one is templated and only used once in Graph::init
 {
 	BOOST_FOREACH( typename TGraph::edge_descriptor ed, graph.getEdges() )
 	{
 		typename TGraph::Edge& edge           = graph.instance( ed );
 		typename TGraph::Vertex& vertexSource = graph.sourceInstance( ed );
-		typename TGraph::Vertex& vertexDest   = graph.targetInstance( ed );
+		typename TGraph::Vertex& vertexTarget = graph.targetInstance( ed );
 
 		//TUTTLE_TLOG( TUTTLE_INFO, "[connectClips] " << edge );
-		//TUTTLE_TLOG( TUTTLE_INFO, vertexSource << "->" << vertexDest );
+		//TUTTLE_TLOG( TUTTLE_INFO, vertexSource << "->" << vertexTarget );
 		
-		if( vertexDest.hasProcessNode() && vertexSource.hasProcessNode() )
+		if( vertexTarget.hasProcessNode() && vertexSource.hasProcessNode() )
 		{
 			INode& sourceNode = vertexSource.getProcessNode();
-			INode& targetNode = vertexDest.getProcessNode();
-			targetNode.connect( sourceNode, targetNode.getAttribute( edge.getInAttrName() ) );
+			INode& targetNode = vertexTarget.getProcessNode();
+			// Does this connects the clips of an ImageProcessNode ?
+			targetNode.connectClips( sourceNode, targetNode.getAttribute( edge.getInAttrName() ) );
 		}
 	}
 }
@@ -270,6 +273,7 @@ inline void graphConnectClips( TGraph& graph )
 
 void Graph::init()
 {
+	// Connects the input clip on the output clip
 	graphConnectClips<InternalGraphImpl>( _graph );
 }
 
