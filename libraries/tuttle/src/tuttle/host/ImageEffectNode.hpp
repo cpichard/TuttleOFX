@@ -65,7 +65,7 @@ public:
 
 	const ENodeType getNodeType() const { return eNodeTypeImageEffect; }
 
-	void connect( const INode& sourceEffect, attribute::Attribute& attr );
+	void connectClips( const INode& sourceEffect, attribute::Attribute& attr );
 
 	attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false )       { return dynamic_cast<attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }
 	const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const { return dynamic_cast<const attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }

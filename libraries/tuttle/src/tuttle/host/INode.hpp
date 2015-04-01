@@ -120,7 +120,7 @@ public:
 
 
 #ifndef SWIG
-	virtual void connect( const INode&, attribute::Attribute& ) = 0;
+	virtual void connectClips( const INode&, attribute::Attribute& ) = 0;
 
 	virtual void setup1() = 0;
 	virtual void setup2_reverse() = 0;

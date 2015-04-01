@@ -29,18 +29,19 @@ inline void connectClips( TGraph& graph )
 	BOOST_FOREACH( typename TGraph::edge_descriptor ed, graph.getEdges() )
 	{
 		typename TGraph::Edge& edge           = graph.instance( ed );
-		typename TGraph::Vertex& vertexOutput = graph.targetInstance( ed );
-		typename TGraph::Vertex& vertexInput  = graph.sourceInstance( ed );
+		typename TGraph::Vertex& vertexTarget = graph.targetInstance( ed );
+		typename TGraph::Vertex& vertexSource = graph.sourceInstance( ed );
 
 		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << edge );
-		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << vertexOutput << " -> " << vertexInput );
+		TUTTLE_TLOG( TUTTLE_TRACE, "[Connect Clips] " << vertexTarget << " -> " << vertexSource );
 		//TUTTLE_TLOG_VAR( TUTTLE_TRACE, edge.getInAttrName() );
 		
-		if( vertexOutput.hasProcessNode() && vertexInput.hasProcessNode() )
+		if( vertexTarget.hasProcessNode() && vertexSource.hasProcessNode() )
 		{
-			INode& outputNode = vertexOutput.getProcessNode();
-			INode& inputNode = vertexInput.getProcessNode();
-			inputNode.connect( outputNode, inputNode.getAttribute( edge.getInAttrName() ) );
+			INode& targetNode = vertexTarget.getProcessNode();
+			INode& sourceNode = vertexSource.getProcessNode();
+            // calls the connectClips function of the inherited class, ImageProcessNode or ...
+			sourceNode.connectClips( targetNode, sourceNode.getAttribute( edge.getInAttrName() ) );
 		}
 	}
 }
