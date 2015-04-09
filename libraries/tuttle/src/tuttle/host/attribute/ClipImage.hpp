@@ -47,6 +47,9 @@ private:
 public:
 	ClipImage* clone() const { return new ClipImage( *this ); }
 
+	// FIXME getName has to call its parent class OfxhAttributeAccessor::getName 
+	// because Attribute has also a getName function which is virtual pure.
+	// Investigate if it is possible to get rid of one of the getName or reorganize this class hierarchy
 	const std::string& getName() const { return ofx::attribute::OfxhAttributeAccessor::getName(); }
 
 	/// @warning HACK ! to keep the connection
