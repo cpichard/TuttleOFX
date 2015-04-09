@@ -1260,7 +1260,7 @@ void OfxhImageEffectNode::setDefaultClipPreferences()
 				else if( rawPreMult == kOfxImageUnPreMultiplied && premult != kOfxImagePreMultiplied )
 					premult = kOfxImageUnPreMultiplied;
 				deepestBitDepth = findDeepestBitDepth( deepestBitDepth, rawDepth );
-				mostComponents  = findMostChromaticComponents( mostComponents, rawComp );
+				mostComponents  = preferedComponents( mostComponents, rawComp );
 			}
 		}
 	}
@@ -1436,7 +1436,7 @@ void OfxhImageEffectNode::setupClipInstancePreferences( property::OfxhSet& outAr
 }
 
 /**
- * the idea here is the clip prefs live as active props on the effect
+ * the idea here is the clip preferences is store as properties on the effect
  * and are set up by clip preferences. The action manages the clip
  * preferences bits. We also monitor clip and param changes and
  * flag when clip prefs is dirty.
@@ -1472,7 +1472,7 @@ void OfxhImageEffectNode::getClipPreferencesAction() OFX_EXCEPTION_SPEC
  * find the most chromatic components out of the two. Override this if you define
  * more chromatic components
  */
-const std::string& OfxhImageEffectNode::findMostChromaticComponents( const std::string& a, const std::string& b ) const
+const std::string& OfxhImageEffectNode::preferedComponents( const std::string& a, const std::string& b ) const
 {
 	if( a == kOfxImageComponentNone )
 		return b;
