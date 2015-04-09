@@ -7,7 +7,7 @@
 namespace tuttle {
 namespace host {
 
-INode* createNode( const std::string& pluginName )
+ImageEffectNode* createNode( const std::string& pluginName )
 {
 	ofx::imageEffect::OfxhImageEffectPlugin* plug = core().getImageEffectPluginById( pluginName );
 
@@ -89,7 +89,7 @@ NodeInit::NodeInit( const std::string& pluginName )
 	setNode( *createNode( pluginName ) );
 }
 
-NodeInit::NodeInit( INode& node )
+NodeInit::NodeInit( ImageEffectNode& node )
 {
 	setNode( node );
 }

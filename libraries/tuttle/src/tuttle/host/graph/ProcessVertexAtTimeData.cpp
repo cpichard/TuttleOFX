@@ -1,5 +1,5 @@
 #include "ProcessVertexAtTimeData.hpp"
-#include "tuttle/host/INode.hpp"
+#include "tuttle/host/ImageEffectNode.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -9,6 +9,8 @@
 namespace tuttle {
 namespace host {
 namespace graph {
+
+    
 
 std::ostream& operator<<( std::ostream& os, const ProcessVertexAtTimeInfo& infos )
 {
@@ -35,37 +37,38 @@ std::ostream& operator<<( std::ostream& os, const ProcessVertexAtTimeData& vData
 	os << "__________" << std::endl;
 
 	// imageEffect specific options
-	switch( vData._nodeData->_apiType )
-	{
-		case INode::eNodeTypeImageEffect:
-			os << "api: Image effect" << std::endl;
-			os << "field:" << vData._apiImageEffect._field << std::endl;
-			os << "renderRoI:" << vData._apiImageEffect._renderRoI << std::endl;
-			os << "renderScale:" << vData._nodeData->_renderScale << std::endl;
+    //INode::ENodeType nodeType = vData._apiImageEffect.getNodeType();
+	//switch( nodeType )
+	//{
+	//	case INode::eNodeTypeImageEffect:
+	//		os << "api: Image effect" << std::endl;
+	//		os << "field:" << vData._apiImageEffect._field << std::endl;
+	//		os << "renderRoI:" << vData._apiImageEffect._renderRoI << std::endl;
+	//		os << "renderScale:" << vData._nodeData->_renderScale << std::endl;
 
-			os << "clips:" << vData._apiImageEffect._inputsRoI.size() << std::endl;
-			BOOST_FOREACH( const ProcessVertexAtTimeData::ImageEffect::MapClipImageRod::value_type & item, vData._apiImageEffect._inputsRoI )
-			{
-				if( item.first )
-				{
-					os << "  clip:" << item.first->getName() << std::endl;
-					os << "  roi:" << item.second << std::endl;
-				}
-			}
-			break;
-		case INode::eNodeTypeGraph:
-			os << "api: Graph" << std::endl;
-			break;
-		case INode::eNodeTypeParam:
-			os << "api: Param" << std::endl;
-			break;
-		case INode::eNodeTypeBuffer:
-			os << "api: Input Buffer" << std::endl;
-			break;
-		case INode::eNodeTypeUnknown:
-			os << "api: Unknown" << std::endl;
-			break;
-	}
+	//		os << "clips:" << vData._apiImageEffect._inputsRoI.size() << std::endl;
+	//		BOOST_FOREACH( const ProcessVertexAtTimeData::ImageEffect::MapClipImageRod::value_type & item, vData._apiImageEffect._inputsRoI )
+	//		{
+	//			if( item.first )
+	//			{
+	//				os << "  clip:" << item.first->getName() << std::endl;
+	//				os << "  roi:" << item.second << std::endl;
+	//			}
+	//		}
+	//		break;
+	//	case INode::eNodeTypeGraph:
+	//		os << "api: Graph" << std::endl;
+	//		break;
+	//	case INode::eNodeTypeParam:
+	//		os << "api: Param" << std::endl;
+	//		break;
+	//	case INode::eNodeTypeBuffer:
+	//		os << "api: Input Buffer" << std::endl;
+	//		break;
+	//	case INode::eNodeTypeUnknown:
+	//		os << "api: Unknown" << std::endl;
+	//		break;
+	//}
 	return os;
 }
 

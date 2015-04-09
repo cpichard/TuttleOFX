@@ -42,7 +42,7 @@ OutputBufferWrapper Graph::createOutputBuffer()
 
 Graph::Node& Graph::createNode( const std::string& pluginName )
 {
-	INode* node = tuttle::host::createNode( pluginName );
+	ImageEffectNode* node = tuttle::host::createNode( pluginName );
 	return addNode( *node );
 }
 
@@ -51,7 +51,7 @@ Graph::Node& Graph::addNode( const NodeInit& node )
 	return addNode( node.release() ); // transfer ownership
 }
 
-Graph::Node& Graph::addNode( INode& node )
+Graph::Node& Graph::addNode( ImageEffectNode& node )
 {
 	std::stringstream uniqueName;
 	uniqueName << node.getLabel() << "_" << ++_instanceCount[node.getLabel()];
@@ -64,20 +64,20 @@ Graph::Node& Graph::addNode( INode& node )
 	return node;
 }
 
-std::vector<INode*> Graph::addNodes( const std::vector<NodeInit>& nodes )
+std::vector<ImageEffectNode*> Graph::addNodes( const std::vector<NodeInit>& nodes )
 {
-	std::vector<INode*> nodePtrs;
+	std::vector<ImageEffectNode*> nodePtrs;
 	BOOST_FOREACH( const NodeInit& node, nodes )
 	{
-		INode& newNode = addNode( node ); // tranfer nodes ownership to the graph
+		ImageEffectNode& newNode = addNode( node ); // tranfer nodes ownership to the graph
 		nodePtrs.push_back( & newNode );
 	}
 	return nodePtrs;
 }
 
-std::vector<INode*> Graph::addConnectedNodes( const std::vector<NodeInit>& nodes )
+std::vector<ImageEffectNode*> Graph::addConnectedNodes( const std::vector<NodeInit>& nodes )
 {
-	std::vector<INode*> nodePtrs = addNodes( nodes );
+	std::vector<ImageEffectNode*> nodePtrs = addNodes( nodes );
 	if( nodePtrs.size() > 1 )
 		connect( nodePtrs );
 	return nodePtrs;
@@ -262,8 +262,9 @@ inline void graphConnectClips( TGraph& graph )
 		
 		if( vertexTarget.hasProcessNode() && vertexSource.hasProcessNode() )
 		{
-			INode& sourceNode = vertexSource.getProcessNode();
-			INode& targetNode = vertexTarget.getProcessNode();
+            // FIXME: getProcessNode should return an ImageEffectNode
+			ImageEffectNode& sourceNode = vertexSource.getProcessNode().asImageEffectNode();
+			ImageEffectNode& targetNode = vertexTarget.getProcessNode().asImageEffectNode();
 			// Does this connects the clips of an ImageProcessNode ?
 			targetNode.connectClips( sourceNode, targetNode.getAttribute( edge.getInAttrName() ) );
 		}
@@ -446,7 +447,7 @@ std::vector<Graph::Node*> Graph::getNodesByContext( const std::string& context )
 	{
 		try
 		{
-			/// @todo tuttle: use INode here !
+			/// @todo tuttle: use ImageEffectNode here !
 			ImageEffectNode& ie = it->second->asImageEffectNode();
 			
 			if( ie.getContext() == context )
@@ -468,7 +469,7 @@ std::vector<Graph::Node*> Graph::getNodesByPlugin( const std::string& pluginId )
 	{
 		try
 		{
-			/// @todo tuttle: use INode here !
+			/// @todo tuttle: use ImageEffectNode here !
 			ImageEffectNode& ie = it->second->asImageEffectNode();
 
 			if( boost::iequals( ie.getPlugin().getIdentifier(), pluginId ) )

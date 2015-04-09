@@ -623,7 +623,7 @@ int main( int argc, char** argv )
 						// it replaces all the process.
 						// --help,h --version,v --verbose,V --params --clips --props
 
-						ttl::Graph::Node& currentNode = graph.createNode( nodeFullName );
+						ttl::ImageEffectNode& currentNode = graph.createNode( nodeFullName );
 						//if( dummy.isDummyNode( userNodeName ) )
 
 						if( node_vm.count( kHelpOptionLongName ) )

@@ -3,13 +3,16 @@
 
 #include "IVertex.hpp"
 
-#include <tuttle/host/INode.hpp>
+//#include <tuttle/host/INode.hpp>
 
 #include <string>
 #include <iostream>
 
 namespace tuttle {
 namespace host {
+
+class ImageEffectNode;    
+
 namespace graph {
 
 /**
@@ -23,7 +26,7 @@ public:
 	UVertex()
 	{}
 	
-	UVertex( const std::string& name, INode& processNode );
+	UVertex( const std::string& name, ImageEffectNode& processNode );
 
 	~UVertex() {}
 

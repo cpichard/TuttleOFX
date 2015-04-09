@@ -34,7 +34,7 @@ namespace host {
 	memory::MemoryCache internCache;
 
 	Graph graph;
-	std::vector<INode*> nodes = graph.addConnectedNodes(
+	std::vector<ImageEffectNode*> nodes = graph.addConnectedNodes(
 		list_of
 		( NodeInit(io::getBestReader(imagePath))
 			.setParam("filename", imagePath.c_str()) )

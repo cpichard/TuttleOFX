@@ -44,6 +44,10 @@ class ProcessVertexAtTimeInfo;
 class ImageEffectNode;
 
 
+// FIXME: this class is a semi interface as it is has pure virtual function and also data.
+// It seems to be only derived by ImageEffectNode, and could potentially merged in
+// ImageEffectNode 
+
 class INode : private boost::noncopyable
 {
 public:
@@ -90,8 +94,8 @@ public:
 	virtual const ofx::property::OfxhSet& getProperties() const = 0;
 	virtual ofx::property::OfxhSet&       getEditableProperties() = 0;
 
-	virtual attribute::Attribute& getAttribute( const std::string& name ) = 0;
-	const attribute::Attribute& getAttribute( const std::string& name ) const { return const_cast<INode*>(this)->getAttribute( name ); }
+	//virtual attribute::Attribute& getAttribute( const std::string& name ) = 0;
+	//const attribute::Attribute& getAttribute( const std::string& name ) const { return const_cast<INode*>(this)->getAttribute( name ); }
 	virtual attribute::Attribute&       getSingleInputAttribute()       = 0;
 	virtual const attribute::Attribute& getSingleInputAttribute() const = 0;
 	
@@ -103,11 +107,11 @@ public:
 	virtual const ofx::attribute::OfxhParam& getParam( const std::size_t  index ) const = 0;
 	virtual ofx::attribute::OfxhParam&       getParam( const std::size_t  index ) = 0;
 
-	virtual attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false ) = 0;
-	virtual const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const = 0;
+	//virtual attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false ) = 0;
+	//virtual const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const = 0;
 
-	attribute::ClipImage&       getOutputClip()       { return getClip( kOfxImageEffectOutputClipName ); }
-	const attribute::ClipImage& getOutputClip() const { return getClip( kOfxImageEffectOutputClipName ); }
+	//attribute::ClipImage&       getOutputClip()       { return getClip( kOfxImageEffectOutputClipName ); }
+	//const attribute::ClipImage& getOutputClip() const { return getClip( kOfxImageEffectOutputClipName ); }
 
 	virtual ofx::attribute::OfxhParamSet& getParamSet() = 0;
 	virtual const ofx::attribute::OfxhParamSet& getParamSet() const = 0;
@@ -120,7 +124,7 @@ public:
 
 
 #ifndef SWIG
-	virtual void connectClips( const INode&, attribute::Attribute& ) = 0;
+	//virtual void connectClips( const INode&, attribute::Attribute& ) = 0;
 
 	virtual void setup1() = 0;
 	//virtual void setup2_reverse() = 0;

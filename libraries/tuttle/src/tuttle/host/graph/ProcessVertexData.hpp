@@ -17,9 +17,10 @@ class ProcessVertexData
 typedef ProcessVertexData This;
 
 public:
-	ProcessVertexData( memory::IMemoryCache* internMemoryCache, const INode::ENodeType apiType = INode::eNodeTypeUnknown )
+	ProcessVertexData( memory::IMemoryCache* internMemoryCache
+            )//, const INode::ENodeType apiType = INode::eNodeTypeUnknown )
 		: _internMemoryCache( internMemoryCache )
-		, _apiType( apiType )
+		//, _apiType( apiType )
 		, _step( 1 )
 		, _interactive( 0 )
 		, _outDegree( 0 )
@@ -56,7 +57,7 @@ public:
 	// const GraphProcessData& _data; /// @todo tuttle: graph common datas, like renderScale
 	OfxPointD _renderScale;
 
-	INode::ENodeType _apiType;
+	//INode::ENodeType _apiType;
 	OfxRangeD _renderTimeRange;
 	OfxRangeD _timeDomain;
 	OfxTime _step;

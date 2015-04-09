@@ -1,7 +1,7 @@
 #ifndef _TUTTLE_HOST_NODE_HPP_
 #define _TUTTLE_HOST_NODE_HPP_
 
-#include "INode.hpp"
+#include "ImageEffectNode.hpp"
 #include "ComputeOptions.hpp"
 #include "memory/MemoryCache.hpp"
 
@@ -16,7 +16,7 @@ class NodeInit;
 
 using boost::assign::list_of;
 
-INode* createNode( const std::string& pluginName );
+ImageEffectNode* createNode( const std::string& pluginName );
 
 bool compute( const std::vector<NodeInit>& nodes,
 		const ComputeOptions& options = ComputeOptions() );
@@ -39,7 +39,7 @@ class NodeInit
 public:
 	NodeInit(){}
 	NodeInit( const std::string& pluginName );
-	NodeInit( INode& node );
+	NodeInit( ImageEffectNode& node );
 	/**
 	 * @brief Non-standard copy contructor that steals the data.
 	 */
@@ -54,8 +54,8 @@ public:
 		return *this;
 	}
 	
-	INode& operator->() { return *_node.get(); }
-	const INode& operator->() const { return *_node.get(); }
+	ImageEffectNode& operator->() { return *_node.get(); }
+	const ImageEffectNode& operator->() const { return *_node.get(); }
 	
 	/**
 	 * @brief Set parameter values. If it's a multi-dimensional parameter,
@@ -69,16 +69,16 @@ public:
 	 */
 	NodeInit& setParamExp( const std::string& paramName, const std::string& paramValue );
 	
-	const INode& get() const { return *_node; }
-	INode& get() { return *_node; }
+	const ImageEffectNode& get() const { return *_node; }
+	ImageEffectNode& get() { return *_node; }
 	
-	void setNode( INode& node ) { _node.reset(&node); }
-	INode& release() const { return *_node.release(); }
+	void setNode( ImageEffectNode& node ) { _node.reset(&node); }
+	ImageEffectNode& release() const { return *_node.release(); }
 
     void setBeforeRenderCallback(Callback *cb);
 
 private:
-	mutable std::auto_ptr<INode> _node;
+	mutable std::auto_ptr<ImageEffectNode> _node;
 };
 
 }

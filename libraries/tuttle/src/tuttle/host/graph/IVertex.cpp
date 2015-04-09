@@ -16,7 +16,7 @@ IVertex::IVertex( const std::string& name )
 	, _id( _count++ )
 {}
 
-IVertex::IVertex( const std::string& name, INode& processNode )
+IVertex::IVertex( const std::string& name, ImageEffectNode& processNode )
 	: _name( name )
 	, _processNode( &processNode )
 	, _used( true )

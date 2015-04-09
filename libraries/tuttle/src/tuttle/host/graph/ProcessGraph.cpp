@@ -38,8 +38,8 @@ inline void connectClips( TGraph& graph )
 		
 		if( vertexTarget.hasProcessNode() && vertexSource.hasProcessNode() )
 		{
-			INode& targetNode = vertexTarget.getProcessNode();
-			INode& sourceNode = vertexSource.getProcessNode();
+			ImageEffectNode& targetNode = vertexTarget.getProcessNode().asImageEffectNode();
+			ImageEffectNode& sourceNode = vertexSource.getProcessNode().asImageEffectNode();
             // calls the connectClips function of the inherited class, ImageProcessNode or ...
 			sourceNode.connectClips( targetNode, sourceNode.getAttribute( edge.getInAttrName() ) );
 		}
@@ -194,13 +194,13 @@ void ProcessGraph::initRenderGraph( Graph& userGraph, const std::list<std::strin
             // FIXME : why using 2 methods ? USE_LINK and not USE_LINK ?
             //          decide !!!!
 #ifdef PROCESSGRAPH_USE_LINK
-			tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
+			tuttle::host::ImageEffectNode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
 #else
-			const tuttle::host::INode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
+			const tuttle::host::ImageEffectNode& origNode = v.getProcessNode(); // pointer of the copied graph, we don't own it !
 #endif
 			std::string key( origNode.getName() ); // Shouldn't it be origNode.getKey() ??
 			NodeMap::iterator it = _nodes.find( key );
-			tuttle::host::INode* newNode;
+			tuttle::host::ImageEffectNode* newNode;
 			if( it != _nodes.end() )
 			{
 				newNode = it->second;
@@ -239,7 +239,7 @@ void ProcessGraph::setup()
 		{
 			v.copyProcessData( _defaultProcessData ); 
             // Link the pointer of the newly created v._data to the process node
-            // NOTE that it changes the user graph if the INode is the original shared
+            // NOTE that it changes the user graph if the ImageEffectNode is the original shared
 			v.getProcessNode().setProcessData( &v._data );
 		}
 	}

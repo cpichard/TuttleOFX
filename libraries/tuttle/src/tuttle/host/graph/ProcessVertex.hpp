@@ -29,7 +29,8 @@ public:
 	ProcessVertex& operator=( const UVertex& v )
 	{
 		IVertex::operator=(v);
-		_data._apiType = v.getProcessNode().getNodeType();
+		// FIXME _data._apiType = v.getProcessNode().getNodeType();
+        // is it used ?
 		return *this;
 	}
 

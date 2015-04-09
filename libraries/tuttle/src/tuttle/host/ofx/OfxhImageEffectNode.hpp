@@ -470,7 +470,7 @@ protected:
 
 	/// find the most chromatic components out of the two. Override this if you define
 	/// more chromatic components
-	virtual const std::string& findMostChromaticComponents( const std::string& a, const std::string& b ) const;
+	virtual const std::string& preferedComponents( const std::string& a, const std::string& b ) const;
 
 	/** is the given bit depth supported
 	 */

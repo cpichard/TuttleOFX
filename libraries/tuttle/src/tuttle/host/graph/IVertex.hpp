@@ -1,15 +1,20 @@
 #ifndef _TUTTLE_HOST_IVERTEX_HPP_
 #define	_TUTTLE_HOST_IVERTEX_HPP_
 
-#include <tuttle/host/INode.hpp>
+//#include <tuttle/host/ImageEffectNode.hpp>
 #include <tuttle/host/exceptions.hpp>
 #include <tuttle/common/utils/global.hpp>
 
 #include <iostream>
 #include <set>
 
+
+
 namespace tuttle {
 namespace host {
+
+class ImageEffectNode;    
+
 namespace graph {
 
 class IVertex
@@ -17,7 +22,7 @@ class IVertex
 public:
 	IVertex( const std::string& name = "Undefined" );
 
-	IVertex( const std::string& name, INode& processNode );
+	IVertex( const std::string& name, ImageEffectNode& processNode );
 
 	IVertex( const IVertex& v );
 
@@ -31,13 +36,11 @@ public:
 		return *this;
 	}
 
-    // FIXME: "fake" doesn't mean anything. 
-    // to double check but it more likeky means hasNoProcessNode()
     bool                  hasProcessNode() const                             { return _processNode!=NULL;}
 	void                  setUsed( const bool used = true )                  { _used = used; }
 	bool                  isUsed() const                                     { return _used; }
 	const std::string&    getName() const                                    { return _name; }
-	INode&                getProcessNode()
+	ImageEffectNode&                getProcessNode()
 	{
 		if( !_processNode )
 		{
@@ -46,7 +49,7 @@ public:
 		}
 		return *_processNode;
 	}
-	const INode&          getProcessNode() const
+	const ImageEffectNode&          getProcessNode() const
 	{
 		if( !_processNode )
 		{
@@ -56,7 +59,7 @@ public:
 		return *_processNode;
 	}
 
-	void                  setProcessNode( INode* p )
+	void                  setProcessNode( ImageEffectNode* p )
 	{
 		_processNode = p;
 	}
@@ -68,7 +71,7 @@ public:
 	std::string _name;
 	
 private:
-	INode* _processNode; // FIXME : why is it stored in a IVertex ?
+	ImageEffectNode* _processNode; // FIXME : why is it stored in a IVertex ?
 	bool _used; // FIXME : remove as it is only used to compute connected component in 1 function and
                 //         can be replaced 
 	static int _count;

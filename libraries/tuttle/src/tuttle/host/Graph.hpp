@@ -4,7 +4,7 @@
 #include "NodeListArg.hpp"
 #include "ComputeOptions.hpp"
 #include "Core.hpp"
-#include "INode.hpp"
+#include "ImageEffectNode.hpp"
 #include "InputBufferWrapper.hpp"
 #include "OutputBufferWrapper.hpp"
 #include "exceptions.hpp"
@@ -39,7 +39,7 @@ class Graph
 public:
 	typedef graph::UVertex Vertex;
 	typedef graph::UEdge Edge;
-	typedef INode Node; /// @todo tuttle INode...
+	typedef ImageEffectNode Node; /// Whatt ?? @todo tuttle ImageEffectNode...
 	typedef attribute::Attribute Attribute;
 	typedef graph::InternalGraph<Vertex, Edge> InternalGraphImpl;
 	typedef InternalGraphImpl::vertex_descriptor vertex_descriptor;
@@ -87,21 +87,21 @@ public:
 	 * 
 	 * @warning: The node will be renamed.
 	 */
-	Node& addNode( INode& node );
+	Node& addNode( ImageEffectNode& node );
 	
 	/**
 	 * @brief Add nodes to the graph.
 	 * 
 	 * @warning: Nodes will be renamed.
 	 */
-	std::vector<INode*> addNodes( const std::vector<NodeInit>& nodes );
+	std::vector<ImageEffectNode*> addNodes( const std::vector<NodeInit>& nodes );
 	
 	/**
 	 * @brief Add nodes to the graph and connect them linearly.
 	 * 
 	 * @warning: Nodes will be renamed.
 	 */
-	std::vector<INode*> addConnectedNodes( const std::vector<NodeInit>& nodes );
+	std::vector<ImageEffectNode*> addConnectedNodes( const std::vector<NodeInit>& nodes );
 	
 	/**
 	 * @brief Rename a node in the current graph.

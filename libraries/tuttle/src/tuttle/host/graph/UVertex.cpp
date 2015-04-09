@@ -5,7 +5,7 @@ namespace host {
 namespace graph {
 
 
-UVertex::UVertex( const std::string& name, INode& processNode )
+UVertex::UVertex( const std::string& name, ImageEffectNode& processNode )
 : IVertex( name, processNode )
 {
 }
