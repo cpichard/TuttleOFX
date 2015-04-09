@@ -18,8 +18,12 @@ public:
 	Param( INode& effect );
 	virtual ~Param() = 0;
 
-	bool isOutput() const { return false; }
-	
+	//bool isOutput() const { return false; } // FIXME: This function seems to be unused, so remove it ?
+
+	//
+	// FIXME getName has to call its parent class OfxhParamAccessor::getName 
+	// because Attribute has also a getName function which is virtual pure.
+	// Investigate if it is possible to get rid of one of the getName or reorganize this class hierarchy
 	const std::string& getName() const { return ofx::attribute::OfxhParamAccessor::getName(); }
 };
 
