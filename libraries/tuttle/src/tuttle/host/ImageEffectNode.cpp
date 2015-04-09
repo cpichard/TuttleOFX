@@ -383,26 +383,26 @@ void ImageEffectNode::beginSequenceRenderAction( OfxTime   startFrame,
 	OfxhImageEffectNode::beginSequenceRenderAction( startFrame, endFrame, step, interactive, renderScale );
 }
 
-void ImageEffectNode::checkClipsConnected() const
-{
-	for( ClipImageMap::const_iterator it = _clipImages.begin();
-	     it != _clipImages.end();
-	     ++it )
-	{
-		const attribute::ClipImage& clip = dynamic_cast<const attribute::ClipImage&>( *( it->second ) );
-		if( !clip.isOutput() && !clip.isConnected() && !clip.isOptional() ) // one non optional input clip is unconnected
-		{
-			BOOST_THROW_EXCEPTION( exception::Logic()
-			    << exception::user( "A non optional clip is unconnected ! (" + clip.getFullName() + ")" ) );
-		}
-	}
-}
+//void ImageEffectNode::checkClipsConnected() const
+//{
+//	for( ClipImageMap::const_iterator it = _clipImages.begin();
+//	     it != _clipImages.end();
+//	     ++it )
+//	{
+//		const attribute::ClipImage& clip = dynamic_cast<const attribute::ClipImage&>( *( it->second ) );
+//		if( !clip.isOutput() && !clip.isConnected() && !clip.isOptional() ) // one non optional input clip is unconnected
+//		{
+//			BOOST_THROW_EXCEPTION( exception::Logic()
+//			    << exception::user( "A non optional clip is unconnected ! (" + clip.getFullName() + ")" ) );
+//		}
+//	}
+//}
 
 void ImageEffectNode::initComponents()
 {
-	attribute::ClipImage& outputClip    = dynamic_cast<attribute::ClipImage&>( getOutputClip() );
+	attribute::ClipImage& outputClip    = getOutputClip();
 	//bool inputClipsFound                = false;
-	std::string mostChromaticComponents = kOfxImageComponentNone;
+	std::string components = kOfxImageComponentNone;
 
 	for( ClipImageMap::iterator it = _clipImages.begin();
 	     it != _clipImages.end();
@@ -413,7 +413,7 @@ void ImageEffectNode::initComponents()
 		{
 			//inputClipsFound = true;
 			const attribute::ClipImage& linkClip = clip.getConnectedClip();
-			mostChromaticComponents = findMostChromaticComponents( linkClip.getComponentsString(), mostChromaticComponents );
+			components = preferedComponents( linkClip.getComponentsString(), components );
 		}
 	}
 	// components
@@ -425,85 +425,93 @@ void ImageEffectNode::initComponents()
 		if( !clip.isOutput() && clip.isConnected() )
 		{
 			const attribute::ClipImage& linkClip = clip.getConnectedClip();
-			if( clip.isSupportedComponent( mostChromaticComponents ) )
+			if( clip.isSupportedComponent( components ) )
 				clip.setComponentsStringIfNotModifiedByPlugin( linkClip.getComponentsString() );
+            // FIXME: If the parent node has RGB and this node only accept RGB for it input,
+            // the input is never set to RGBA. How can we access that it is compatible ?
+            // The links does not need to have the same component endpoints ?
+            // At this stage, we don't know
 		}
 	}
-	if( outputClip.isSupportedComponent( mostChromaticComponents ) )
-		outputClip.setComponentsStringIfNotModifiedByPlugin( mostChromaticComponents );
+    // FIXME: same remark as previously stated
+	if( outputClip.isSupportedComponent( components ) )
+		outputClip.setComponentsStringIfNotModifiedByPlugin( components );
 }
 
 /// @todo multiple PAR
-void ImageEffectNode::initInputClipsPixelAspectRatio()
-{
-	std::set<double> inputPARs;
-//	if( supportsMultipleClipPARs() )
-	{
-		for( ClipImageMap::iterator it = _clipImages.begin();
-			 it != _clipImages.end();
-			 ++it )
-		{
-			attribute::ClipImage& clip = dynamic_cast<attribute::ClipImage&>( *( it->second ) );
-			TUTTLE_TLOG( TUTTLE_INFO, "[Clip] " << clip.getName() );
-			if( !clip.isOutput() && clip.isConnected() )
-			{
-				const attribute::ClipImage& linkClip = clip.getConnectedClip();
-				const double par = linkClip.getPixelAspectRatio();
-				TUTTLE_TLOG( TUTTLE_INFO, "[Clip] " << linkClip.getName() << ", pixel aspect ratio = " << par );
-				clip.setPixelAspectRatio( par, ofx::property::eModifiedByHost );
-				inputPARs.insert( par );
-			}
-		}
-	}
-//	else
+//.void ImageEffectNode::initInputClipsPixelAspectRatio()
+//.{
+//.	std::set<double> inputPARs;
+//.//	if( supportsMultipleClipPARs() )
+//.	{
+//.		for( ClipImageMap::iterator it = _clipImages.begin();
+//.			 it != _clipImages.end();
+//.			 ++it )
+//.		{
+//.			attribute::ClipImage& clip = dynamic_cast<attribute::ClipImage&>( *( it->second ) );
+//.			TUTTLE_TLOG( TUTTLE_INFO, "[Clip] " << clip.getName() );
+//.			if( !clip.isOutput() && clip.isConnected() )
+//.			{
+//.				const attribute::ClipImage& linkClip = clip.getConnectedClip();
+//.				const double par = linkClip.getPixelAspectRatio();
+//.				TUTTLE_TLOG( TUTTLE_INFO, "[Clip] " << linkClip.getName() << ", pixel aspect ratio = " << par );
+//.				clip.setPixelAspectRatio( par, ofx::property::eModifiedByHost );
+//.				inputPARs.insert( par );
+//.			}
+//.		}
+//.	}
+//.//	else
+//.//	{
+//.//		// @todo The plugin doesn't support PAR, the host should do the conversions!
+//.//		// http://openfx.sourceforge.net/Documentation/1.3/ofxProgrammingReference.html#ImageEffectsPixelAspectRatios
+//.//		// If a plugin does not accept clips of differing PARs, then the host must resample all images fed to that effect to agree with the output's PAR.
+//.//		// If a plugin does accept clips of differing PARs, it will need to specify the output clip's PAR in the kOfxImageEffectActionGetClipPreferences action.
+//.//		
+//.//		// Convert images here ? Or introduce convert nodes into the ProcessGraph?
+//.//		BOOST_ASSERT(false);
+//.//	}
+//.	
+//.	// Not supported yet. So fail in debug,
+//.	// and process with a wrong pixel aspect ratio in release.
+//.	TUTTLE_TLOG( TUTTLE_INFO, "[Clip] support Multiple clip PAR = " << supportsMultipleClipPARs() );
+//.	TUTTLE_TLOG( TUTTLE_INFO, "[Clip] number of clips = " << getNbClips() );
+//.	BOOST_ASSERT( inputPARs.size() <= 1 || supportsMultipleClipPARs() || getNbClips() <= 2 );
+//.}
+
+//void ImageEffectNode::initInputClipsFps()
+//{
+//	for( ClipImageMap::iterator it = _clipImages.begin();
+//	     it != _clipImages.end();
+//	     ++it )
 //	{
-//		// @todo The plugin doesn't support PAR, the host should do the conversions!
-//		// http://openfx.sourceforge.net/Documentation/1.3/ofxProgrammingReference.html#ImageEffectsPixelAspectRatios
-//		// If a plugin does not accept clips of differing PARs, then the host must resample all images fed to that effect to agree with the output's PAR.
-//		// If a plugin does accept clips of differing PARs, it will need to specify the output clip's PAR in the kOfxImageEffectActionGetClipPreferences action.
-//		
-//		// Convert images here ? Or introduce convert nodes into the ProcessGraph?
-//		BOOST_ASSERT(false);
+//		attribute::ClipImage& clip = dynamic_cast<attribute::ClipImage&>( *( it->second ) );
+//		if( !clip.isOutput() && clip.isConnected() )
+//		{
+//			const attribute::ClipImage& linkClip = clip.getConnectedClip();
+//			clip.setFrameRate( linkClip.getFrameRate() );
+//		}
 //	}
-	
-	// Not supported yet. So fail in debug,
-	// and process with a wrong pixel aspect ratio in release.
-	TUTTLE_TLOG( TUTTLE_INFO, "[Clip] support Multiple clip PAR = " << supportsMultipleClipPARs() );
-	TUTTLE_TLOG( TUTTLE_INFO, "[Clip] number of clips = " << getNbClips() );
-	BOOST_ASSERT( inputPARs.size() <= 1 || supportsMultipleClipPARs() || getNbClips() <= 2 );
-}
-
-void ImageEffectNode::initInputClipsFps()
-{
-	for( ClipImageMap::iterator it = _clipImages.begin();
-	     it != _clipImages.end();
-	     ++it )
-	{
-		attribute::ClipImage& clip = dynamic_cast<attribute::ClipImage&>( *( it->second ) );
-		if( !clip.isOutput() && clip.isConnected() )
-		{
-			const attribute::ClipImage& linkClip = clip.getConnectedClip();
-			clip.setFrameRate( linkClip.getFrameRate() );
-		}
-	}
-}
-
-void ImageEffectNode::initFps()
-{
-	attribute::ClipImage& outputClip = dynamic_cast<attribute::ClipImage&>( getOutputClip() );
-	outputClip.setFrameRate( getOutputFrameRate() );
-}
-
-void ImageEffectNode::initPixelAspectRatio()
-{
-	attribute::ClipImage& outputClip = dynamic_cast<attribute::ClipImage&>( getOutputClip() );
-	outputClip.setPixelAspectRatio( getOutputPixelAspectRatio(), ofx::property::eModifiedByHost );
-}
+//}
+//
+//void ImageEffectNode::initFps()
+//{
+//	attribute::ClipImage& outputClip = getOutputClip();
+//    // NOTE: getOutputFrameRate returns the _outputFrameRate value
+//	outputClip.setFrameRate( getOutputFrameRate() );
+//}
+//
+//void ImageEffectNode::initPixelAspectRatio()
+//{
+//    // FIXME: check that we don't get a value from the output clip to set the same value to the same clip.
+//    // it appears to change only the ofx::property::eModifiedByHost
+//	attribute::ClipImage& outputClip = getOutputClip();
+//	outputClip.setPixelAspectRatio( getOutputPixelAspectRatio(), ofx::property::eModifiedByHost );
+//}
 
 void ImageEffectNode::maximizeBitDepthFromReadsToWrites()
 {
 	std::string biggestBitDepth      = kOfxBitDepthNone;
-	attribute::ClipImage& outputClip = dynamic_cast<attribute::ClipImage&>( getOutputClip() );
+	attribute::ClipImage& outputClip = getOutputClip();
 	bool inputClipsFound             = false;
 
 	// init variables
@@ -519,7 +527,7 @@ void ImageEffectNode::maximizeBitDepthFromReadsToWrites()
 			biggestBitDepth = ofx::imageEffect::findDeepestBitDepth( linkClip.getBitDepthString(), biggestBitDepth );
 		}
 	}
-	const std::string validBitDepth = this->bestSupportedBitDepth( biggestBitDepth );
+	const std::string validBitDepth = bestSupportedBitDepth( biggestBitDepth );
 
 	// bit depth
 	if( supportsMultipleClipDepths() )
@@ -537,6 +545,7 @@ void ImageEffectNode::maximizeBitDepthFromReadsToWrites()
 				const std::string& linkClipBitDepth  = linkClip.getBitDepthString();
 				if( this->isSupportedBitDepth( linkClipBitDepth ) )
 				{
+					// updateBestBitDepth instead ??
 					clip.setBitDepthStringIfUpperAndNotModifiedByPlugin( linkClipBitDepth );
 				}
 			}
@@ -572,6 +581,8 @@ void ImageEffectNode::maximizeBitDepthFromReadsToWrites()
 	outputClip.setBitDepthStringIfUpperAndNotModifiedByPlugin( validBitDepth );
 }
 
+
+// Previously setup2
 void ImageEffectNode::maximizeBitDepthFromWritesToReads()
 {
 	//TUTTLE_TLOG( TUTTLE_INFO, "maximizeBitDepthFromWritesToReads: " << getName() );
@@ -592,9 +603,11 @@ void ImageEffectNode::maximizeBitDepthFromWritesToReads()
 
 				//TUTTLE_TLOG( TUTTLE_INFO, clip.getFullName() << "(" << clip.getBitDepth() << ")" << "-->" << linkClip.getFullName() << "(" << linkClip.getBitDepth() << ")" );
 				if( linkClip.getNode().getNodeType() == INode::eNodeTypeImageEffect &&
-				    linkClip.getNode().asImageEffectNode().isSupportedBitDepth( outputClipBitDepthStr ) ) // need to be supported by the other node
+					// need to be supported by the other node
+				    linkClip.getNode().asImageEffectNode().isSupportedBitDepth( outputClipBitDepthStr ) ) 
 				{
-					if( linkClip.getNode().asImageEffectNode().supportsMultipleClipDepths() ) /// @todo tuttle: is this test correct in all cases?
+					/// @todo tuttle: is this test correct in all cases?
+					if( linkClip.getNode().asImageEffectNode().supportsMultipleClipDepths() ) 
 					{
 						linkClip.setBitDepthStringIfUpper( outputClipBitDepthStr );
 					}
@@ -745,19 +758,88 @@ OfxRangeD ImageEffectNode::computeTimeDomain()
 	return range;
 }
 
-
+// Function called by a visitor to setup color components, bit depth and pixel aspect ratio
+// FIXME rename setup1 by something meaningful
 void ImageEffectNode::setup1()
 {
-	checkClipsConnected();
-	
-	initInputClipsFps();
-	initInputClipsPixelAspectRatio();
+	for( ClipImageMap::const_iterator it = _clipImages.begin();
+	     it != _clipImages.end();
+	     ++it )
+	{
+		attribute::ClipImage& clip = dynamic_cast<attribute::ClipImage&>( *( it->second ) );
+		if( !clip.isOutput() )
+		{
+            // Ensure all the required input clips are connected
+			if (!clip.isConnected() && !clip.isOptional())
+			{
+				BOOST_THROW_EXCEPTION( exception::Logic()
+					<< exception::user( "A non optional clip is unconnected ! (" + clip.getFullName() + ")" ) );
+			}
 
+            // Set frame rate and aspect ratio
+			if( clip.isConnected() )
+			{
+				// Propagate frame rate from read to write on connection between different node
+				const attribute::ClipImage& linkClip = clip.getConnectedClip();
+				clip.setFrameRate( linkClip.getFrameRate() );
+
+				// Propagate aspect ratio from read to write
+				const double par = linkClip.getPixelAspectRatio();
+				TUTTLE_TLOG( TUTTLE_INFO, "[Clip] " << linkClip.getName() << ", pixel aspect ratio = " << par );
+				clip.setPixelAspectRatio( par, ofx::property::eModifiedByHost );
+			}
+
+		}
+	}
+
+	// If several inputs have different aspect ratio, the node must
+	// "supportsMultipleClipPARs" if it doesn't, we have to check that they all the same 
+	// or raise an error
+	// @todo The plugin doesn't support PAR, the host should do the conversions!
+	// http://openfx.sourceforge.net/Documentation/1.3/ofxProgrammingReference.html#ImageEffectsPixelAspectRatios
+	// If a plugin does not accept clips of differing PARs, then the host must resample all images fed to that effect to agree with the output's PAR.
+	// If a plugin does accept clips of differing PARs, it will need to specify the output clip's PAR in the kOfxImageEffectActionGetClipPreferences action.
+	if ( ! supportsMultipleClipPARs() )
+	{ 
+		double commonPAR = 0; // This assumes that no pixel aspect ratio equal to 0
+		for( ClipImageMap::const_iterator it = _clipImages.begin();
+			 it != _clipImages.end();
+			++it )
+		{
+			const attribute::ClipImage& clip = dynamic_cast<const attribute::ClipImage&>( *( it->second ) );
+			if (!clip.isOutput())
+			{
+				BOOST_ASSERT(clip.getPixelAspectRatio() != 0.0);
+				// Init first time
+				if (!commonPAR)
+				{
+					commonPAR = clip.getPixelAspectRatio();
+				}
+				else if ( commonPAR != clip.getPixelAspectRatio())
+				{
+					BOOST_THROW_EXCEPTION(exception::MissingHostFeature()
+							<< exception::user( "Pixel aspect ratio conversion between " 
+							+ clip.getFullName() + " and " 
+							+ clip.getConnectedClipFullName() + " is not supported by the host"));	
+				}
+			}
+		}
+	}
+	////checkClipsConnected();
+	//initInputClipsFps();
+	//initInputClipsPixelAspectRatio();
+
+	// OFX call to get preferences from the plugin
 	getClipPreferencesAction();
 	
 	initComponents();
-	initPixelAspectRatio();
-	initFps();
+
+	attribute::ClipImage& outputClip = getOutputClip();
+	outputClip.setPixelAspectRatio( getOutputPixelAspectRatio(), ofx::property::eModifiedByHost );
+	outputClip.setFrameRate( getOutputFrameRate() );
+
+	//initPixelAspectRatio();
+	//initFps();
 	
 	maximizeBitDepthFromReadsToWrites();
 }

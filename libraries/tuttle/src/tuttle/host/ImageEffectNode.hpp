@@ -264,14 +264,14 @@ public:
 	                        bool      interactive,
 	                        OfxPointD renderScale ) OFX_EXCEPTION_SPEC;
 
-private:
+//private:
 	void checkClipsConnected() const;
 
 	void initComponents();
 	void initInputClipsPixelAspectRatio();
-	void initPixelAspectRatio();
+	//void initPixelAspectRatio();
 	void initInputClipsFps();
-	void initFps();
+	//void initFps();
 	
 	void maximizeBitDepthFromReadsToWrites();
 	void maximizeBitDepthFromWritesToReads();
