@@ -39,7 +39,7 @@ namespace ofx {
 
 /// Things that display progress derive from this ABC and implement the following
 /// functions.
-class OfxhIProgress : virtual public OfxhIObject
+class OfxhIProgress // FIXME remove if unused: virtual public OfxhIObject
 {
 public:
 	virtual ~OfxhIProgress() {}

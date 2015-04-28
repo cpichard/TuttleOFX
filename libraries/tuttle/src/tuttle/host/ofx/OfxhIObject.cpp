@@ -4,8 +4,9 @@ namespace tuttle {
 namespace host {
 namespace ofx {
 
-OfxhIObject::~OfxhIObject()
-{}
+// FIXME : this class seems unused
+//OfxhIObject::~OfxhIObject()
+//{}
 
 }
 }

@@ -23,7 +23,7 @@ namespace attribute {
 /// but that adds complexity for no strong gain.
 class OfxhParamSet
 	: public OfxhParamSetAccessor
-	, virtual public OfxhIObject
+	// FIXME remove if unused, virtual public OfxhIObject
 {
 public:
 	typedef OfxhParamSet This;

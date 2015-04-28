@@ -10,11 +10,13 @@ namespace ofx {
  * So all these objects can be seen as OfxhIObject (reinterpret_cast)
  * and then properly dynamic_cast to the desired class.
  */
-class OfxhIObject
-{
-public:
-	virtual ~OfxhIObject() = 0;
-};
+
+// FIXME: I commented this class because it seems totally unused    
+//class OfxhIObject
+//{
+//public:
+//	virtual ~OfxhIObject() = 0;
+//};
 
 }
 }

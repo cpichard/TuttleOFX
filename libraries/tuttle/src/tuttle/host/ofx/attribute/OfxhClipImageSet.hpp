@@ -18,7 +18,7 @@ class OfxhImageEffectNodeDescriptor;
 namespace attribute {
 
 class OfxhClipImageSet
-	: virtual public OfxhIObject
+	// FIXME remove if unused: virtual public OfxhIObject
 	//, public ClipAccessorSet
 {
 public:

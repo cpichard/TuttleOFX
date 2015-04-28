@@ -13,7 +13,8 @@ namespace {
 
 OfxStatus message( void* handle, const char* type, const char* id, const char* format, ... )
 {
-	OfxhIMessage* effectInstance = dynamic_cast<OfxhIMessage*>( reinterpret_cast<OfxhIObject*>( handle ) );
+	//OfxhIMessage* effectInstance = dynamic_cast<OfxhIMessage*>( reinterpret_cast<OfxhIObject*>( handle ) );
+	OfxhIMessage* effectInstance = reinterpret_cast<OfxhIMessage*>( handle );
 
 	if( effectInstance )
 	{

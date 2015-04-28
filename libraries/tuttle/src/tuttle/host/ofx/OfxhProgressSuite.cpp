@@ -14,7 +14,8 @@ OfxStatus ProgressStart( void*       effectInstance,
 {
 	try
 	{
-		OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		//FIXME remove if unused OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhIProgress* me = reinterpret_cast<OfxhIProgress*>( effectInstance );
 		if( !me )
 			return kOfxStatErrBadHandle;
 
@@ -39,7 +40,8 @@ OfxStatus ProgressEnd( void* effectInstance )
 {
 	try
 	{
-		OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		//FIXME remove if unused OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhIProgress* me = reinterpret_cast<OfxhIProgress*>( effectInstance );
 		if( !me )
 			return kOfxStatErrBadHandle;
 
@@ -64,7 +66,8 @@ OfxStatus ProgressUpdate( void* effectInstance, double progress )
 {
 	try
 	{
-		OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		//FIXME remove if unused OfxhIProgress* me = dynamic_cast<OfxhIProgress*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhIProgress* me = reinterpret_cast<OfxhIProgress*>( effectInstance );
 		if( !me )
 			return kOfxStatErrBadHandle;
 

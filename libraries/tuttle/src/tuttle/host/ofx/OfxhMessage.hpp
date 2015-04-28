@@ -10,7 +10,7 @@ namespace tuttle {
 namespace host {
 namespace ofx {
 
-class OfxhIMessage : virtual public OfxhIObject
+class OfxhIMessage // FIXME remove if unused: virtual public OfxhIObject
 {
 public:
 	virtual ~OfxhIMessage() {}

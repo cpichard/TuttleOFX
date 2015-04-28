@@ -16,7 +16,8 @@ OfxStatus TimelineGetTime( void* effectInstance, double* time )
 {
 	try
 	{
-		OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		// FIXME OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhITimeline* me = reinterpret_cast<OfxhITimeline*>( effectInstance );
 		if( !me )
 			return kOfxStatErrBadHandle;
 
@@ -41,7 +42,8 @@ OfxStatus TimelineGotoTime( void* effectInstance, double time )
 {
 	try
 	{
-		OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		//FIXME remove if unused OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhITimeline* me = reinterpret_cast<OfxhITimeline*>( effectInstance ); 
 		if( !me )
 			return kOfxStatErrBadHandle;
 
@@ -66,7 +68,8 @@ OfxStatus TimelineGetBounds( void* effectInstance, double* firstTime, double* la
 {
 	try
 	{
-		OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		// FIXME remove if unused OfxhITimeline* me = dynamic_cast<OfxhITimeline*>( reinterpret_cast<OfxhIObject*>( effectInstance ) );
+		OfxhITimeline* me = reinterpret_cast<OfxhITimeline*>( effectInstance );
 		if( !me )
 			return kOfxStatErrBadHandle;
 

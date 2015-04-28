@@ -25,7 +25,7 @@ namespace imageEffect {
 /**
  * base class to both effect descriptors and instances
  */
-class OfxhImageEffectNodeBase : virtual public OfxhIObject
+class OfxhImageEffectNodeBase // FIXME remove if unused : virtual public OfxhIObject
 {
 protected:
 	property::OfxhSet _properties;
