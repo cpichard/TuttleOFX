@@ -66,6 +66,26 @@ ImageEffectNode::ImageEffectNode( const ImageEffectNode& other )
 ImageEffectNode::~ImageEffectNode()
 {}
 
+attribute::ClipImage& ImageEffectNode::getClip( const std::string& name, const bool acceptPartialName )
+{
+    return dynamic_cast<attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) );
+}
+
+const attribute::ClipImage& ImageEffectNode::getClip( const std::string& name, const bool acceptPartialName ) const 
+{ 
+    return dynamic_cast<const attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); 
+}
+
+const attribute::Attribute& ImageEffectNode::getAttribute( const std::string& name ) const 
+{ 
+    return getClip( name ); 
+}
+
+attribute::Attribute& ImageEffectNode::getAttribute( const std::string& name ) 
+{ 
+    return getClip( name ); 
+}
+
 bool ImageEffectNode::operator==( const INode& other ) const
 {
 	const ImageEffectNode* other_ptr = dynamic_cast<const ImageEffectNode*>( &other );

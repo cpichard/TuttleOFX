@@ -69,14 +69,14 @@ public:
 
 	void connectClips( const ImageEffectNode& sourceEffect, attribute::Attribute& attr );
 
-	attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false )       { return dynamic_cast<attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }
-	const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const { return dynamic_cast<const attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }
+	attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false );//       { return dynamic_cast<attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }
+	const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const ;//{ return dynamic_cast<const attribute::ClipImage&>( ofx::attribute::OfxhClipImageSet::getClip( name, acceptPartialName ) ); }
 
 	attribute::ClipImage&       getOutputClip()       { return getClip( kOfxImageEffectOutputClipName ); }
 	const attribute::ClipImage& getOutputClip() const { return getClip( kOfxImageEffectOutputClipName ); }
 	
-	const attribute::Attribute& getAttribute( const std::string& name ) const { return getClip( name ); }
-	attribute::Attribute& getAttribute( const std::string& name ) { return getClip( name ); }
+	const attribute::Attribute& getAttribute( const std::string& name ) const ;//{ return getClip( name ); }
+	attribute::Attribute& getAttribute( const std::string& name ) ;//{ return getClip( name ); }
 	attribute::Attribute& getSingleInputAttribute();
 
 	const attribute::Attribute& getSingleInputAttribute() const { return const_cast<ImageEffectNode*>( this )->getSingleInputAttribute(); }
