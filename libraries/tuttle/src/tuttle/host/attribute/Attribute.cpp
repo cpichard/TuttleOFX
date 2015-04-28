@@ -6,7 +6,7 @@ namespace tuttle {
 namespace host {
 namespace attribute {
 
-Attribute::Attribute( INode& effect )
+Attribute::Attribute( ImageEffectNode& effect )
 	: _effect( effect )
 {}
 
@@ -21,7 +21,7 @@ Attribute& Attribute::operator=( const Attribute& other )
 	return * this;
 }
 
-const INode& Attribute::getNode() const
+const ImageEffectNode& Attribute::getNode() const
 {
 	return _effect;
 }

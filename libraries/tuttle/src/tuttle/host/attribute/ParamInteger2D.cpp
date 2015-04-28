@@ -1,12 +1,12 @@
 #include "ParamInteger2D.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamInteger2D::ParamInteger2D( INode&                           effect,
+ParamInteger2D::ParamInteger2D( ImageEffectNode&                           effect,
                                 const std::string&                         name,
                                 const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

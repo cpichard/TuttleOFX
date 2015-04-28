@@ -1,13 +1,13 @@
 #include "ParamBoolean.hpp"
 #include "expression.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamBoolean::ParamBoolean( INode&                           effect,
+ParamBoolean::ParamBoolean( ImageEffectNode&                           effect,
                             const std::string&                         name,
                             const ofx::attribute::OfxhParamDescriptor& descriptor,
                             const std::size_t                          index )

@@ -31,7 +31,7 @@ namespace tuttle {
 namespace host {
 namespace attribute {
 
-ClipImage::ClipImage( INode& effect, const ofx::attribute::OfxhClipImageDescriptor& desc )
+ClipImage::ClipImage( ImageEffectNode& effect, const ofx::attribute::OfxhClipImageDescriptor& desc )
 	: Attribute( effect )
 	, tuttle::host::ofx::attribute::OfxhClipImage( desc )
 	, _isConnected( false )
@@ -92,7 +92,7 @@ OfxRectD ClipImage::fetchRegionOfDefinition( const OfxTime time ) const
 
 	switch( getNode().getNodeType() )
 	{
-		case INode::eNodeTypeImageEffect:
+		case ImageEffectNode::eNodeTypeImageEffect:
 			return getNode().asImageEffectNode().getRegionOfDefinition( time );
 		default:
 			BOOST_THROW_EXCEPTION( exception::Bug()

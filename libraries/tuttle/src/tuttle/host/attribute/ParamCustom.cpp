@@ -1,13 +1,13 @@
 #include "ParamCustom.hpp"
 #include "expression.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamCustom::ParamCustom( INode&                           effect,
+ParamCustom::ParamCustom( ImageEffectNode&                           effect,
                           const std::string&                         name,
                           const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

@@ -7,7 +7,7 @@
 namespace tuttle {
 namespace host {
 
-class INode;
+class ImageEffectNode;
 
 namespace attribute {
 
@@ -15,7 +15,7 @@ class Param : public Attribute
 	, virtual public ofx::attribute::OfxhParamAccessor
 {
 public:
-	Param( INode& effect );
+	Param( ImageEffectNode& effect );
 	virtual ~Param() = 0;
 
 	//bool isOutput() const { return false; } // FIXME: This function seems to be unused, so remove it ?

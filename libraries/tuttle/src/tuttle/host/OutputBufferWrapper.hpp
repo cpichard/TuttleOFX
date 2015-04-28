@@ -1,7 +1,7 @@
 #ifndef _TUTTLE_HOST_OUTPUTBUFFERWRAPPER_HPP_
 #define	_TUTTLE_HOST_OUTPUTBUFFERWRAPPER_HPP_
 
-#include "INode.hpp"
+#include "ImageEffectNode.hpp"
 #include <tuttle/host/attribute/Param.hpp>
 #include <tuttle/host/attribute/ClipImage.hpp>
 #include <tuttle/host/attribute/ClipImage.hpp>
@@ -15,7 +15,7 @@ namespace host {
 class OutputBufferWrapper
 {
 private:
-	INode* _node;
+	ImageEffectNode* _node;
 
 public:
 
@@ -49,7 +49,7 @@ public:
 	typedef void (*CallbackOutputImagePtr)( OfxTime time, CustomDataPtr outputCustomData, void* rawdata, int width, int height, int rowSizeBytes, EBitDepth bitDepth, EPixelComponent components, EField field );
 	typedef void (*CallbackDestroyCustomDataPtr)( CustomDataPtr outputCustomData );
 
-	OutputBufferWrapper( INode& node )
+	OutputBufferWrapper( ImageEffectNode& node )
 	: _node(&node)
 	{}
 	OutputBufferWrapper()
@@ -57,7 +57,7 @@ public:
 	{}
 	~OutputBufferWrapper() {}
 
-	INode& getNode() { return *_node; }
+	ImageEffectNode& getNode() { return *_node; }
 
 	void setCallback( CallbackOutputImagePtr callback, CustomDataPtr customData = NULL, CallbackDestroyCustomDataPtr destroyCustomData = NULL );
 };

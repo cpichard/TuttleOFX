@@ -1,12 +1,12 @@
 #include "ParamDouble3D.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamDouble3D::ParamDouble3D( INode&                           effect,
+ParamDouble3D::ParamDouble3D( ImageEffectNode&                           effect,
                               const std::string&                         name,
                               const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

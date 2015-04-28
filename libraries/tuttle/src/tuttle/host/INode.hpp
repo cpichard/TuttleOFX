@@ -76,36 +76,38 @@ public:
 	{}
 	
 	virtual ~INode();
-	virtual INode* clone() const = 0;
-	virtual bool operator==( const INode& ) const = 0;
+	//virtual INode* clone() const = 0;
+	//virtual bool operator==( const INode& ) const = 0;
 	
+    // TODO : getName is used in the INode.cpp
 	virtual const std::string& getName() const = 0;
-	virtual void setName( const std::string& name ) = 0;
-	virtual const ENodeType    getNodeType() const = 0;
+	//virtual void setName( const std::string& name ) = 0;
+	//virtual const ENodeType    getNodeType() const = 0;
 
 	ImageEffectNode& asImageEffectNode();
 	const ImageEffectNode& asImageEffectNode() const;
 
-	virtual std::vector<int> getVersion() const = 0;
+	// TODO : getVersion is used in INode.cpp
+    virtual std::vector<int> getVersion() const = 0;
 	std::string getVersionStr() const;
 	
-	virtual std::string getLabel() const = 0;
+	//virtual std::string getLabel() const = 0;
 
-	virtual const ofx::property::OfxhSet& getProperties() const = 0;
-	virtual ofx::property::OfxhSet&       getEditableProperties() = 0;
+	//virtual const ofx::property::OfxhSet& getProperties() const = 0;
+	//virtual ofx::property::OfxhSet&       getEditableProperties() = 0;
 
 	//virtual attribute::Attribute& getAttribute( const std::string& name ) = 0;
 	//const attribute::Attribute& getAttribute( const std::string& name ) const { return const_cast<INode*>(this)->getAttribute( name ); }
-	virtual attribute::Attribute&       getSingleInputAttribute()       = 0;
-	virtual const attribute::Attribute& getSingleInputAttribute() const = 0;
+	//virtual attribute::Attribute&       getSingleInputAttribute()       = 0;
+	//virtual const attribute::Attribute& getSingleInputAttribute() const = 0;
 	
-	virtual std::size_t getNbParams() const = 0;
-	virtual const ofx::attribute::OfxhParam& getParam( const std::string& name ) const = 0;
-	virtual ofx::attribute::OfxhParam&       getParam( const std::string& name ) = 0;
-	virtual const ofx::attribute::OfxhParam& getParamByScriptName( const std::string& name, const bool acceptPartialName = false ) const = 0;
-	virtual ofx::attribute::OfxhParam&       getParamByScriptName( const std::string& name, const bool acceptPartialName = false ) = 0;
-	virtual const ofx::attribute::OfxhParam& getParam( const std::size_t  index ) const = 0;
-	virtual ofx::attribute::OfxhParam&       getParam( const std::size_t  index ) = 0;
+	//virtual std::size_t getNbParams() const = 0;
+	//virtual const ofx::attribute::OfxhParam& getParam( const std::string& name ) const = 0;
+	//virtual ofx::attribute::OfxhParam&       getParam( const std::string& name ) = 0;
+	//virtual const ofx::attribute::OfxhParam& getParamByScriptName( const std::string& name, const bool acceptPartialName = false ) const = 0;
+	//virtual ofx::attribute::OfxhParam&       getParamByScriptName( const std::string& name, const bool acceptPartialName = false ) = 0;
+	//virtual const ofx::attribute::OfxhParam& getParam( const std::size_t  index ) const = 0;
+	//virtual ofx::attribute::OfxhParam&       getParam( const std::size_t  index ) = 0;
 
 	//virtual attribute::ClipImage&       getClip( const std::string& name, const bool acceptPartialName = false ) = 0;
 	//virtual const attribute::ClipImage& getClip( const std::string& name, const bool acceptPartialName = false ) const = 0;
@@ -113,42 +115,42 @@ public:
 	//attribute::ClipImage&       getOutputClip()       { return getClip( kOfxImageEffectOutputClipName ); }
 	//const attribute::ClipImage& getOutputClip() const { return getClip( kOfxImageEffectOutputClipName ); }
 
-	virtual ofx::attribute::OfxhParamSet& getParamSet() = 0;
-	virtual const ofx::attribute::OfxhParamSet& getParamSet() const = 0;
+	//virtual ofx::attribute::OfxhParamSet& getParamSet() = 0;
+	//virtual const ofx::attribute::OfxhParamSet& getParamSet() const = 0;
 
-	virtual ofx::attribute::OfxhClipImageSet& getClipImageSet() = 0;
-	virtual const ofx::attribute::OfxhClipImageSet& getClipImageSet() const = 0;
+	//virtual ofx::attribute::OfxhClipImageSet& getClipImageSet() = 0;
+	//virtual const ofx::attribute::OfxhClipImageSet& getClipImageSet() const = 0;
 
-	virtual std::size_t getLocalHashAtTime( const OfxTime time ) const = 0;
+	//virtual std::size_t getLocalHashAtTime( const OfxTime time ) const = 0;
 
 
 
 #ifndef SWIG
 	//virtual void connectClips( const INode&, attribute::Attribute& ) = 0;
 
-	virtual void setup1() = 0;
+	//virtual void setup1() = 0;
 	//virtual void setup2_reverse() = 0;
-	virtual void maximizeBitDepthFromWritesToReads () = 0;
-	virtual void setup3() = 0;
+	//virtual void maximizeBitDepthFromWritesToReads () = 0;
+	//virtual void setup3() = 0;
 	
-	virtual OfxRangeD computeTimeDomain() = 0;
+	//virtual OfxRangeD computeTimeDomain() = 0;
 
 //	virtual OfxTime mapInputTime( const OfxTime time ) const = 0;
 	
-	virtual OfxRangeD getTimeDomain() const = 0;
+	//virtual OfxRangeD getTimeDomain() const = 0;
 	
 	/**
 	 * @brief Begin of the a new frame range to process. Initilize this node.
 	 * @param[in] processData
 	 * @remark called on each node without predefined order.
 	 */
-	virtual void beginSequence( graph::ProcessVertexData& processData ) = 0;
+	//virtual void beginSequence( graph::ProcessVertexData& processData ) = 0;
 
 	/**
 	 * @brief Asks the plugin all times it needs for each of it's input clips.
 	 * @param[in] time
 	 */
-	virtual ClipTimesSetMap getTimesNeeded( const OfxTime time ) const = 0;
+	//virtual ClipTimesSetMap getTimesNeeded( const OfxTime time ) const = 0;
 
 	/**
 	 * @brief Initialization pass to propagate informations from inputs to outputs.
@@ -173,7 +175,7 @@ public:
 	 * @param[out] time the time to use as identity
 	 * @return if the node is an identity operation
 	 */
-	virtual bool isIdentity( const graph::ProcessVertexAtTimeData& processData, std::string& clip, OfxTime& time ) const = 0;
+	//virtual bool isIdentity( const graph::ProcessVertexAtTimeData& processData, std::string& clip, OfxTime& time ) const = 0;
 	
 	/**
 	 * @brief Fill ProcessInfo to compute statistics for the current process,
@@ -181,28 +183,28 @@ public:
 	 * @param[in] processData
 	 * @remark Called on each node in a depth first search order. So you have the guarantee that it has been called on each input nodes before.
 	 */
-	virtual void preProcess_infos( const graph::ProcessVertexAtTimeData& processData, const OfxTime time, graph::ProcessVertexAtTimeInfo& nodeInfos ) const = 0;
+	//virtual void preProcess_infos( const graph::ProcessVertexAtTimeData& processData, const OfxTime time, graph::ProcessVertexAtTimeInfo& nodeInfos ) const = 0;
 
 	/**
 	 * @brief Process this node. All inputs are compute.
 	 * @param[in] processData
 	 * @remark Called on each node in a depth first search order. So you have the guarantee that it has been called on each input nodes before.
 	 */
-	virtual void process( graph::ProcessVertexAtTimeData& processData ) = 0;
+	//virtual void process( graph::ProcessVertexAtTimeData& processData ) = 0;
 
 	/**
 	 * @brief The process of all nodes is done for one frame, now finalize this node.
 	 * @param[in] processData
 	 * @remark Called on each node in a depth first search order. So you have the guarantee that it has been called on each input nodes before.
 	 */
-	virtual void postProcess( graph::ProcessVertexAtTimeData& processData ) = 0;
+	//virtual void postProcess( graph::ProcessVertexAtTimeData& processData ) = 0;
 
 	/**
 	 * @brief End of the whole frame range process, now finalize this node.
 	 * @param[in] processData
 	 * @remark called on each node without predefined order.
 	 */
-	virtual void endSequence( graph::ProcessVertexData& processData ) = 0;
+	//virtual void endSequence( graph::ProcessVertexData& processData ) = 0;
 
 
 
@@ -214,7 +216,7 @@ public:
      */
     void setBeforeRenderCallback(Callback *cb);
 
-	virtual std::ostream& print( std::ostream& os ) const = 0;
+	//virtual std::ostream& print( std::ostream& os ) const = 0;
 
 	friend std::ostream& operator<<( std::ostream& os, const This& v );
 
@@ -254,10 +256,10 @@ public:
 /**
  * @brief to make clonable for use in boost::ptr_container.
  */
-inline INode* new_clone( const INode& a )
-{
-	return a.clone();
-}
+//inline INode* new_clone( const INode& a )
+//{
+//	return a.clone();
+//}
 
 #endif
 

@@ -8,7 +8,7 @@ Used for ParamDouble and ParamInteger */
 #include "Param.hpp"
 #include "expression.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 #include <tuttle/host/ofx/attribute/OfxhParamDouble.hpp>
 #include <tuttle/host/ofx/attribute/OfxhParamInteger.hpp>
 #include <tuttle/host/attribute/ValueInterpolator.hpp>
@@ -45,7 +45,7 @@ public:
 	typedef typename std::vector< TimeValue<T> >::const_iterator TimeValueTConstIterator;
 
 	AnimatedParam(
-		INode& effect,
+		ImageEffectNode& effect,
 		const std::string& name,
 		const ofx::attribute::OfxhParamDescriptor& descriptor,
 		const std::size_t index,
@@ -363,7 +363,7 @@ class AnimatedParamDouble : public AnimatedParam<double, ofx::attribute::OfxhPar
 public:
 	
 	AnimatedParamDouble(
-		INode& effect,
+		ImageEffectNode& effect,
 		const std::string& name,
 		const ofx::attribute::OfxhParamDescriptor& descriptor,
 		const std::size_t index,

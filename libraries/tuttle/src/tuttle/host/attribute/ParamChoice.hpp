@@ -16,7 +16,7 @@ protected:
 	int _value;
 
 public:
-	ParamChoice( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamChoice( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamChoice* clone() const { return new ParamChoice( *this ); }
 
 	int getDefault() const;

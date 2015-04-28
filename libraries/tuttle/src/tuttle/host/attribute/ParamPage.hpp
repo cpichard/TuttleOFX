@@ -13,7 +13,7 @@ class ParamPage : public Param
 	, public ofx::attribute::OfxhParamPage
 {
 public:
-	ParamPage( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamPage( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamPage* clone() const { return new ParamPage( *this ); }
 
 	void copy( const ParamPage& p ) OFX_EXCEPTION_SPEC;

@@ -3,8 +3,8 @@
 
 #include "Attribute.hpp"
 
+#include <tuttle/host/ImageEffectNode.hpp>
 #include <tuttle/host/attribute/Image.hpp>
-#include <tuttle/host/INode.hpp>
 #include <tuttle/host/memory/IMemoryCache.hpp>
 #include <tuttle/host/ofx/attribute/OfxhClipImage.hpp>
 
@@ -23,7 +23,7 @@ namespace attribute {
 class ClipImage : public Attribute
 	, public ofx::attribute::OfxhClipImage
 {
-friend class INode;
+friend class ImageEffectNode;
 
 protected:
 	std::string _name;
@@ -35,7 +35,7 @@ protected:
 	const ClipImage* _connectedClip; ///< @warning HACK ! to keep the connection @todo remove this !!!!
 
 public:
-	ClipImage( INode& effect, const ofx::attribute::OfxhClipImageDescriptor& desc );
+	ClipImage( ImageEffectNode& effect, const ofx::attribute::OfxhClipImageDescriptor& desc );
 	
 	ClipImage( const ClipImage& other );
 	

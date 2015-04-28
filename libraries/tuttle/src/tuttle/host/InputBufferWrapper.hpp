@@ -1,7 +1,7 @@
 #ifndef _TUTTLE_HOST_INPUTBUFFERNODE_HPP_
 #define	_TUTTLE_HOST_INPUTBUFFERNODE_HPP_
 
-#include "INode.hpp"
+#include "ImageEffectNode.hpp"
 #include <tuttle/host/attribute/Param.hpp>
 #include <tuttle/host/attribute/ClipImage.hpp>
 #include <tuttle/host/attribute/ClipImage.hpp>
@@ -49,10 +49,10 @@ public:
 	typedef void (*CallbackDestroyCustomDataPtr)( CustomDataPtr outputCustomData );
 
 private:
-	INode* _node;
+	ImageEffectNode* _node;
 	
 public:
-	InputBufferWrapper( INode& node )
+	InputBufferWrapper( ImageEffectNode& node )
 	: _node(&node)
 	{}
 	InputBufferWrapper()
@@ -61,7 +61,7 @@ public:
 	~InputBufferWrapper()
 	{}
 
-	INode& getNode() { return *_node; }
+	ImageEffectNode& getNode() { return *_node; }
 
 	void setMode( const EMode mode );
 	void setBuffer( void* rawBuffer );

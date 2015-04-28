@@ -1,12 +1,12 @@
 #include "ParamRGBA.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamRGBA::ParamRGBA( INode&                           effect,
+ParamRGBA::ParamRGBA( ImageEffectNode&                           effect,
                       const std::string&                         name,
                       const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

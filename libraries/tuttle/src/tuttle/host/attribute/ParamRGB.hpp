@@ -15,7 +15,7 @@ class ParamRGB : public Param
 	, public ParamDoubleMultiDim<3>
 {
 public:
-	ParamRGB( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamRGB( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamRGB* clone() const { return new ParamRGB( *this ); }
 
 	OfxRGBColourD getDefault() const;

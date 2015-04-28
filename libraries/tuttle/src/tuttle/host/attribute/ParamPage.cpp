@@ -1,12 +1,12 @@
 #include "ParamPage.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamPage::ParamPage( INode&                           effect,
+ParamPage::ParamPage( ImageEffectNode&                           effect,
                       const std::string&                         name,
                       const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

@@ -153,10 +153,10 @@ INode::DataAtTime& INode::getLastData()
 	return const_cast<DataAtTime&>( const_cast<const This*>(this)->getLastData() );
 }
 
-std::ostream& operator<<( std::ostream& os, const INode& v )
-{
-	return v.print(os);
-}
+//std::ostream& operator<<( std::ostream& os, const INode& v )
+//{
+//	return v.print(os);
+//}
 
 }
 }

@@ -1,12 +1,12 @@
 #include "ParamRGB.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamRGB::ParamRGB( INode&                           effect,
+ParamRGB::ParamRGB( ImageEffectNode&                           effect,
                     const std::string&                         name,
                     const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

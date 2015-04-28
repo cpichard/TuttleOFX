@@ -17,7 +17,7 @@ protected:
 	std::string _value; /// @todo link de parametres
 
 public:
-	ParamCustom( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamCustom( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamCustom* clone() const { return new ParamCustom( *this ); }
 
 	const std::string& getDefault() const;

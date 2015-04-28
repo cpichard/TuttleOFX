@@ -1,12 +1,12 @@
 #include "ParamInteger.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamInteger::ParamInteger( INode&                           effect,
+ParamInteger::ParamInteger( ImageEffectNode&                           effect,
                             const std::string&                         name,
                             const ofx::attribute::OfxhParamDescriptor& descriptor,
                             const std::size_t                          index )

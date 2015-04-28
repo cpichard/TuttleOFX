@@ -1,13 +1,13 @@
 #include "ParamString.hpp"
 #include "expression.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamString::ParamString( INode&                           effect,
+ParamString::ParamString( ImageEffectNode&                           effect,
                           const std::string&                         name,
                           const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

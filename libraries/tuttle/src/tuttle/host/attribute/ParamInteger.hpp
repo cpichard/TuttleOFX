@@ -12,7 +12,7 @@ class ParamInteger :
 	public AnimatedParamInteger
 {
 public:
-	ParamInteger( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor, const std::size_t index = 0 );
+	ParamInteger( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor, const std::size_t index = 0 );
 
 	int getDefault() const;
 };

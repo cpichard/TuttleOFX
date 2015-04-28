@@ -1,12 +1,12 @@
 #include "ParamPushButton.hpp"
 
-#include <tuttle/host/INode.hpp>
+#include <tuttle/host/ImageEffectNode.hpp>
 
 namespace tuttle {
 namespace host {
 namespace attribute {
 
-ParamPushButton::ParamPushButton( INode&                           effect,
+ParamPushButton::ParamPushButton( ImageEffectNode&                           effect,
                                   const std::string&                         name,
                                   const ofx::attribute::OfxhParamDescriptor& descriptor )
 	: Param( effect )

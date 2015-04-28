@@ -12,7 +12,7 @@ class ParamDouble2D : public Param
 	, public ParamDoubleMultiDim<2>
 {
 public:
-	ParamDouble2D( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamDouble2D( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamDouble2D* clone() const { return new ParamDouble2D( *this ); }
 
 	OfxPointD getDefault() const;

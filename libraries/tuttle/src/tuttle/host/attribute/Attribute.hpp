@@ -6,7 +6,7 @@
 namespace tuttle {
 namespace host {
 
-class INode;
+class ImageEffectNode;
 
 namespace attribute {
 
@@ -17,17 +17,17 @@ namespace attribute {
 class Attribute
 {
 protected:
-	/*const*/ INode& _effect;
+	/*const*/ ImageEffectNode& _effect;
 
 public:
-	Attribute( INode& effect );
+	Attribute( ImageEffectNode& effect );
 	Attribute( const Attribute& other );
 	virtual ~Attribute() = 0;
 
 	Attribute& operator=( const Attribute& other );
 	
 	virtual const std::string& getName() const = 0;
-	const INode&     getNode() const;
+	const ImageEffectNode&     getNode() const;
 };
 
 }

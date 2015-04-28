@@ -14,7 +14,7 @@ class ParamRGBA : public Param
 	, public ParamDoubleMultiDim<4>
 {
 public:
-	ParamRGBA( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamRGBA( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	virtual ParamRGBA* clone() const { return new ParamRGBA( *this ); }
 
 	OfxRGBAColourD getDefault() const;

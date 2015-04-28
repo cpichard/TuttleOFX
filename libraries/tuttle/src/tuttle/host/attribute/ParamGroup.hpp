@@ -13,7 +13,7 @@ class ParamGroup : public Param
 	, public ofx::attribute::OfxhParamGroup
 {
 public:
-	ParamGroup( INode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
+	ParamGroup( ImageEffectNode& effect, const std::string& name, const ofx::attribute::OfxhParamDescriptor& descriptor );
 	ParamGroup* clone() const { return new ParamGroup( *this ); }
 
 	void copy( const ParamGroup& p ) OFX_EXCEPTION_SPEC;
